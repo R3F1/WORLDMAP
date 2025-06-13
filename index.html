@@ -7,10 +7,154 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style> html, body, #map { height: 100%; margin: 0; } </style>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+  <style>
+    .country-label {
+      font-weight: bold;
+      font-size: 14px;
+      color: black;
+      text-shadow: 0 0 3px white;
+    }
+    .legend {
+      position: absolute;
+      bottom: 30px;
+      left: 30px;
+      background: rgba(255,255,255,0.95);
+      padding: 12px 18px;
+      border-radius: 8px;
+      font-size: 14px;
+      box-shadow: 0 0 10px #aaa;
+      z-index: 999;
+    }
+    .legend span {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+    #resetBtn {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 9999;
+      background-color: #f44336;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      font-size: 14px;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
 <div id="map"></div>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+<script>
+  let distanceMarkers = [];
+  let distanceLine = null;
+  let distanceLabel = null;
+
+  function haversine(lat1, lon1, lat2, lon2) {
+    function toRad(x) { return x * Math.PI / 180; }
+    const R = 6371e3;
+    const φ1 = toRad(lat1), φ2 = toRad(lat2);
+    const Δφ = toRad(lat2 - lat1);
+    const Δλ = toRad(lon2 - lon1);
+    const a = Math.sin(Δφ/2)**2 + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ/2)**2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  }
+
+  function formatDistance(d) {
+    return (d / 1000).toFixed(2) + " km";
+  }
+
+  function resetMeasurement() {
+    distanceMarkers.forEach(m => map.removeLayer(m));
+    if (distanceLine) map.removeLayer(distanceLine);
+    if (distanceLabel) map.removeLayer(distanceLabel);
+    distanceMarkers = [];
+    distanceLine = null;
+    distanceLabel = null;
+  }
+
+  function animatePulse(latlng) {
+    const pulse = L.circle(latlng, {
+      radius: 50000,
+      color: 'red',
+      fillColor: 'red',
+      fillOpacity: 0.3
+    }).addTo(map);
+    let r = 50000;
+    let interval = setInterval(() => {
+      r += 10000;
+      pulse.setRadius(r);
+      pulse.setStyle({opacity: 0.3 - (r - 50000)/200000});
+      if (r > 200000) {
+        map.removeLayer(pulse);
+        clearInterval(interval);
+      }
+    }, 40);
+  }
+
+  // Marker + klik do pomiaru
+  Object.entries(countryShapes).forEach(([name, code]) => {
+    if (!countries[name]) return;
+    fetch('https://raw.githubusercontent.com/datasets/geo-countries/master/data/' + code + '.geojson')
+      .then(resp => resp.json())
+      .then(data => {
+        const layer = L.geoJSON(data, {
+          style: function () {
+            return {
+              color: "#333",
+              weight: 1,
+              fillColor: regionColors[countries[name]],
+              fillOpacity: 0.7
+            };
+          }
+        }).addTo(map);
+        layer.eachLayer(function (featureLayer) {
+          const center = featureLayer.getBounds().getCenter();
+          const tooltip = L.tooltip(center, {
+            permanent: true,
+            direction: 'center',
+            className: 'country-label'
+          }).setContent(name);
+          map.addLayer(tooltip);
+          featureLayer.on("click", function () {
+            if (distanceMarkers.length >= 2) resetMeasurement();
+            const pulseMarker = L.circleMarker(center, {
+              radius: 6, color: 'red', fillColor: 'red', fillOpacity: 1
+            }).addTo(map);
+            animatePulse(center);
+            distanceMarkers.push(pulseMarker);
+            if (distanceMarkers.length === 2) {
+              const p1 = distanceMarkers[0].getLatLng();
+              const p2 = distanceMarkers[1].getLatLng();
+              const dist = haversine(p1.lat, p1.lng, p2.lat, p2.lng);
+              distanceLine = L.polyline([p1, p2], {color: 'red', weight: 3, dashArray: '5, 10'}).addTo(map);
+              distanceLabel = L.marker([(p1.lat + p2.lat)/2, (p1.lng + p2.lng)/2], {
+                icon: L.divIcon({
+                  html: '<div style="background:white;padding:6px 10px;border-radius:6px;font-weight:bold;box-shadow:0 0 6px rgba(0,0,0,0.2);">' + formatDistance(dist) + '</div>'
+                })
+              }).addTo(map);
+            }
+          });
+        });
+      });
+  });
+
+  // Wyszukiwarka
+  L.Control.geocoder({defaultMarkGeocode: false})
+    .on('markgeocode', function(e) {
+      map.setView(e.geocode.center, 5);
+    }).addTo(map);
+</script>
+</script>
 <script>
 var map = L.map('map', {
   center: [52, 15],
@@ -106,6 +250,115 @@ Object.entries(countryShapes).forEach(([name, code]) => {
       }).addTo(map).bindTooltip(name, {{permanent: true, direction: "center", className: "country-label"}});
     });
 });
+
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+<script>
+  let distanceMarkers = [];
+  let distanceLine = null;
+  let distanceLabel = null;
+
+  function haversine(lat1, lon1, lat2, lon2) {
+    function toRad(x) { return x * Math.PI / 180; }
+    const R = 6371e3;
+    const φ1 = toRad(lat1), φ2 = toRad(lat2);
+    const Δφ = toRad(lat2 - lat1);
+    const Δλ = toRad(lon2 - lon1);
+    const a = Math.sin(Δφ/2)**2 + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ/2)**2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  }
+
+  function formatDistance(d) {
+    return (d / 1000).toFixed(2) + " km";
+  }
+
+  function resetMeasurement() {
+    distanceMarkers.forEach(m => map.removeLayer(m));
+    if (distanceLine) map.removeLayer(distanceLine);
+    if (distanceLabel) map.removeLayer(distanceLabel);
+    distanceMarkers = [];
+    distanceLine = null;
+    distanceLabel = null;
+  }
+
+  function animatePulse(latlng) {
+    const pulse = L.circle(latlng, {
+      radius: 50000,
+      color: 'red',
+      fillColor: 'red',
+      fillOpacity: 0.3
+    }).addTo(map);
+    let r = 50000;
+    let interval = setInterval(() => {
+      r += 10000;
+      pulse.setRadius(r);
+      pulse.setStyle({opacity: 0.3 - (r - 50000)/200000});
+      if (r > 200000) {
+        map.removeLayer(pulse);
+        clearInterval(interval);
+      }
+    }, 40);
+  }
+
+  // Marker + klik do pomiaru
+  Object.entries(countryShapes).forEach(([name, code]) => {
+    if (!countries[name]) return;
+    fetch('https://raw.githubusercontent.com/datasets/geo-countries/master/data/' + code + '.geojson')
+      .then(resp => resp.json())
+      .then(data => {
+        const layer = L.geoJSON(data, {
+          style: function () {
+            return {
+              color: "#333",
+              weight: 1,
+              fillColor: regionColors[countries[name]],
+              fillOpacity: 0.7
+            };
+          }
+        }).addTo(map);
+        layer.eachLayer(function (featureLayer) {
+          const center = featureLayer.getBounds().getCenter();
+          const tooltip = L.tooltip(center, {
+            permanent: true,
+            direction: 'center',
+            className: 'country-label'
+          }).setContent(name);
+          map.addLayer(tooltip);
+          featureLayer.on("click", function () {
+            if (distanceMarkers.length >= 2) resetMeasurement();
+            const pulseMarker = L.circleMarker(center, {
+              radius: 6, color: 'red', fillColor: 'red', fillOpacity: 1
+            }).addTo(map);
+            animatePulse(center);
+            distanceMarkers.push(pulseMarker);
+            if (distanceMarkers.length === 2) {
+              const p1 = distanceMarkers[0].getLatLng();
+              const p2 = distanceMarkers[1].getLatLng();
+              const dist = haversine(p1.lat, p1.lng, p2.lat, p2.lng);
+              distanceLine = L.polyline([p1, p2], {color: 'red', weight: 3, dashArray: '5, 10'}).addTo(map);
+              distanceLabel = L.marker([(p1.lat + p2.lat)/2, (p1.lng + p2.lng)/2], {
+                icon: L.divIcon({
+                  html: '<div style="background:white;padding:6px 10px;border-radius:6px;font-weight:bold;box-shadow:0 0 6px rgba(0,0,0,0.2);">' + formatDistance(dist) + '</div>'
+                })
+              }).addTo(map);
+            }
+          });
+        });
+      });
+  });
+
+  // Wyszukiwarka
+  L.Control.geocoder({defaultMarkGeocode: false})
+    .on('markgeocode', function(e) {
+      map.setView(e.geocode.center, 5);
+    }).addTo(map);
 </script>
+</script>
+
+  <div class="legend">
+    <b>Legenda</b><br/>
+    <span style="background:#2ecc71;"></span> EU (członek)<br/>
+    <span style="background:#3498db;"></span> spoza UE
+  </div>
+  <button id="resetBtn" onclick="resetMeasurement()">💾 Reset pomiaru</button>
 </body>
 </html>
