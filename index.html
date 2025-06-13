@@ -3,26 +3,53 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Mapa UE vs non-EU</title>
+  <title>Mapa UE i Non-UE</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <style>
-    #map { height: 100vh; }
+    html, body { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', sans-serif; background: #f7f9fb;}
+    #map { width: 100%; height: 100%; }
+
     .legend {
       position: absolute;
       bottom: 30px;
       left: 30px;
-      background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-      padding: 10px;
-      border: 2px solid #ccc;
-      font-size: 14px;
-      z-index: 999;
+      background: rgba(255,255,255,0.95);
+      padding: 15px 20px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      z-index: 9999;
+      transition: all 0.4s ease-in-out;
+      animation: fadeIn 1s ease-out;
     }
-    .distance-label {
-      background: white;
-      border: 1px solid black;
-      padding: 4px;
-      font-size: 12px;
+
+    .leaflet-tooltip {
+      background-color: rgba(0, 0, 0, 0.85);
+      color: #fff;
+      font-weight: bold;
+      font-size: 13px;
+      padding: 5px 10px;
+      border-radius: 6px;
+      transition: all 0.3s ease-in-out;
+      animation: fadeIn 0.7s ease-out;
+    }
+
+    .leaflet-interactive {
+      transition: transform 0.3s ease, fill-opacity 0.3s ease;
+    }
+
+    .leaflet-interactive:hover {
+      transform: scale(1.2);
+      fill-opacity: 1 !important;
+      stroke: #000;
+      stroke-width: 1;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
@@ -32,12 +59,10 @@
     <b>Legenda:</b><br>
     <span style="color:green;">●</span> EU (członek)<br>
     <span style="color:blue;">●</span> spoza UE<br>
-    📍 Kliknij 2 punkty, aby zmierzyć odległość
+    📏 Kliknij 2 kraje, by zmierzyć odległość
   </div>
 
-  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-  <script src="https://unpkg.com/leaflet-ajax"></script>
-
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
     const map = L.map('map', {
       minZoom: 3,
@@ -45,9 +70,7 @@
       maxBounds: [[30, -20], [70, 50]]
     }).setView([52, 15], 4);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: 'Mapa UE',
-    }).addTo(map);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
     const countries = {
       "EU(欧盟)": {
@@ -93,30 +116,25 @@
       data.list.forEach(country => {
         if (centroids[country]) {
           const marker = L.circleMarker(centroids[country], {
-            radius: 9,
+            radius: 8,
             color: color,
             fillColor: color,
-            fillOpacity: 1, weight: 2
+            fillOpacity: 0.9
           }).addTo(map);
-          marker.bindTooltip(country + " (" + region + ")");
+          marker.bindTooltip(country, { permanent: true, direction: 'top' });
           marker.on('click', addMeasurement);
         }
       });
     });
 
-    // Pomiar odległości
-    let distanceMarkers = [];
-    let distanceLine = null;
-    let distanceLabel = null;
+    let distanceMarkers = [], distanceLine = null, distanceLabel = null;
 
     function haversine(lat1, lon1, lat2, lon2) {
       function toRad(x) { return x * Math.PI / 180; }
-      const R = 6371e3;
-      const φ1 = toRad(lat1), φ2 = toRad(lat2);
-      const Δφ = toRad(lat2 - lat1);
-      const Δλ = toRad(lon2 - lon1);
-      const a = Math.sin(Δφ/2)**2 + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ/2)**2;
-      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      const R = 6371e3, φ1 = toRad(lat1), φ2 = toRad(lat2);
+      const Δφ = toRad(lat2 - lat1), Δλ = toRad(lon2 - lon1);
+      const a = Math.sin(Δφ/2)**2 + Math.cos(φ1)*Math.cos(φ2)*Math.sin(Δλ/2)**2;
+      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
     }
 
     function formatDistance(d) {
