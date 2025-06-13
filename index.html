@@ -62,6 +62,8 @@
 }
 </style>
 <div id="distance-table">
+
+<input id="filterInput" onkeyup="filterTable()" placeholder="🔍 Filtruj..." style="margin-bottom: 12px; padding: 6px 12px; width: 100%; border: 1px solid #ccc; border-radius: 8px; font-size: 16px;" type="text"/>
 <h2>Odległości od Polski (w kilometrach)</h2>
 <table class="dataframe table table-striped">
 <thead>
@@ -561,6 +563,28 @@
     📊 Przejdź do tabeli
   </button>
 </div>
+
+<script>
+function filterTable() {
+  const input = document.getElementById("filterInput");
+  const filter = input.value.toUpperCase();
+  const table = document.querySelector("#distance-table table");
+  const tr = table.getElementsByTagName("tr");
+
+  for (let i = 1; i < tr.length; i++) {
+    let match = false;
+    const tds = tr[i].getElementsByTagName("td");
+    for (let j = 0; j < tds.length; j++) {
+      const td = tds[j];
+      if (td && td.textContent.toUpperCase().indexOf(filter) > -1) {
+        match = true;
+        break;
+      }
+    }
+    tr[i].style.display = match ? "" : "none";
+  }
+}
+</script>
 </body>
 <script>
     
