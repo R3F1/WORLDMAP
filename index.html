@@ -25,7 +25,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_5df476241a95920b9eaeec873d57996d {
+                #map_a621e8ac87d79b8ccb863b03320c0693 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -34,20 +34,35 @@
                 }
             </style>
         
+    <script src="https://cdn.jsdelivr.net/gh/marslan390/BeautifyMarker/leaflet-beautify-marker-icon.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/marslan390/BeautifyMarker/leaflet-beautify-marker-icon.min.css"/>
     <script src="https://cdn.jsdelivr.net/gh/ljagis/leaflet-measure@2.1.7/dist/leaflet-measure.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ljagis/leaflet-measure@2.1.7/dist/leaflet-measure.min.css"/>
 </head>
 <body>
     
     
-            <div class="folium-map" id="map_5df476241a95920b9eaeec873d57996d" ></div>
+<div style="
+    position: fixed; 
+    bottom: 50px; left: 50px; width: 250px; height: 130px; 
+    background-color: white; border:2px solid grey; z-index:9999; 
+    font-size:16px; padding: 10px; box-shadow: 2px 2px 6px rgba(0,0,0,0.3);">
+    <b>Legenda:</b><br>
+    <span style="color:green; font-weight:bold;">●</span> EU (członek) <i>(EU(欧盟))</i><br>
+    <span style="color:blue; font-weight:bold;">●</span> spoza UE <i>(EU(非欧盟))</i><br><br>
+    🔘 Kliknij punkt, by zobaczyć kraj<br>
+    📏 Użyj narzędzia pomiaru
+</div>
+    
+            <div class="folium-map" id="map_a621e8ac87d79b8ccb863b03320c0693" ></div>
         
+    None
 </body>
 <script>
     
     
-            var map_5df476241a95920b9eaeec873d57996d = L.map(
-                "map_5df476241a95920b9eaeec873d57996d",
+            var map_a621e8ac87d79b8ccb863b03320c0693 = L.map(
+                "map_a621e8ac87d79b8ccb863b03320c0693",
                 {
                     center: [52.0, 15.0],
                     crs: L.CRS.EPSG3857,
@@ -56,1181 +71,1440 @@
                     preferCanvas: false,
                 }
             );
+            L.control.scale().addTo(map_a621e8ac87d79b8ccb863b03320c0693);
 
             
 
         
     
-            var tile_layer_415989ae10012a1da6b757bdfbb4a3fa = L.tileLayer(
+            var tile_layer_a467440d3047767ea82885d4f55da29a = L.tileLayer(
                 "https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png",
                 {"attribution": "\u0026copy; \u003ca href=\"http://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors \u0026copy; \u003ca href=\"http://cartodb.com/attributions\"\u003eCartoDB\u003c/a\u003e, CartoDB \u003ca href =\"http://cartodb.com/attributions\"\u003eattributions\u003c/a\u003e", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-            var circle_marker_8c1ce3c17bcdddd8af3508e8bc03d1da = L.circleMarker(
+            var marker_527ddeb3afa76bf4167c73596f56a4a8 = L.marker(
                 [41.3275, 19.8189],
-                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_681546795255671bc8b227ea071225be = L.popup({"maxWidth": "100%"});
+            var beautify_icon_c937b5391048146d56d12592ef33b338 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "blue", "borderColor": "blue", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u25ce", "textColor": "white"}
+            )
+            marker_527ddeb3afa76bf4167c73596f56a4a8.setIcon(beautify_icon_c937b5391048146d56d12592ef33b338);
+        
+    
+        var popup_58c992848b0a367042da379571ff09bc = L.popup({"maxWidth": 200});
 
         
-            var html_053bd64d6ebc8cccd42e39e8db0fc05d = $(`<div id="html_053bd64d6ebc8cccd42e39e8db0fc05d" style="width: 100.0%; height: 100.0%;">Albania</div>`)[0];
-            popup_681546795255671bc8b227ea071225be.setContent(html_053bd64d6ebc8cccd42e39e8db0fc05d);
+            var html_ce8baf80910ccc9049c1e91d34c97c50 = $(`<div id="html_ce8baf80910ccc9049c1e91d34c97c50" style="width: 100.0%; height: 100.0%;"><b>Albania</b><br>EU(非欧盟)</div>`)[0];
+            popup_58c992848b0a367042da379571ff09bc.setContent(html_ce8baf80910ccc9049c1e91d34c97c50);
         
 
-        circle_marker_8c1ce3c17bcdddd8af3508e8bc03d1da.bindPopup(popup_681546795255671bc8b227ea071225be)
+        marker_527ddeb3afa76bf4167c73596f56a4a8.bindPopup(popup_58c992848b0a367042da379571ff09bc)
         ;
 
         
     
     
-            circle_marker_8c1ce3c17bcdddd8af3508e8bc03d1da.bindTooltip(
+            marker_527ddeb3afa76bf4167c73596f56a4a8.bindTooltip(
                 `<div>
-                     Albania (EU(非欧盟))
+                     Albania
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_b702d019ea5edb1c3740f77fb66428d6 = L.circleMarker(
+            var marker_4077e8fd0df53271f5e17d7cb92a9cb3 = L.marker(
                 [53.9006, 27.559],
-                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_da9d0bcef39fab6dbcd6f95b461b6e86 = L.popup({"maxWidth": "100%"});
+            var beautify_icon_8a7766817c4de77efb390142e977be51 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "blue", "borderColor": "blue", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u25ce", "textColor": "white"}
+            )
+            marker_4077e8fd0df53271f5e17d7cb92a9cb3.setIcon(beautify_icon_8a7766817c4de77efb390142e977be51);
+        
+    
+        var popup_4275f937c72841a19aace43d22af148d = L.popup({"maxWidth": 200});
 
         
-            var html_ad3ea83c8c12590b4b87cb779d402f55 = $(`<div id="html_ad3ea83c8c12590b4b87cb779d402f55" style="width: 100.0%; height: 100.0%;">Belarus</div>`)[0];
-            popup_da9d0bcef39fab6dbcd6f95b461b6e86.setContent(html_ad3ea83c8c12590b4b87cb779d402f55);
+            var html_75ca6106e195683ba18c01f3547e77ee = $(`<div id="html_75ca6106e195683ba18c01f3547e77ee" style="width: 100.0%; height: 100.0%;"><b>Belarus</b><br>EU(非欧盟)</div>`)[0];
+            popup_4275f937c72841a19aace43d22af148d.setContent(html_75ca6106e195683ba18c01f3547e77ee);
         
 
-        circle_marker_b702d019ea5edb1c3740f77fb66428d6.bindPopup(popup_da9d0bcef39fab6dbcd6f95b461b6e86)
+        marker_4077e8fd0df53271f5e17d7cb92a9cb3.bindPopup(popup_4275f937c72841a19aace43d22af148d)
         ;
 
         
     
     
-            circle_marker_b702d019ea5edb1c3740f77fb66428d6.bindTooltip(
+            marker_4077e8fd0df53271f5e17d7cb92a9cb3.bindTooltip(
                 `<div>
-                     Belarus (EU(非欧盟))
+                     Belarus
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_55ce482cfe856c8cf3a8a6d0136287e6 = L.circleMarker(
+            var marker_c1cb55d744ebf8c8aa8a33445973c675 = L.marker(
                 [41.7151, 44.8271],
-                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_be50bd6f836d4b862bde30bd8696a520 = L.popup({"maxWidth": "100%"});
+            var beautify_icon_bca335725f656e09baab302cd40940f0 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "blue", "borderColor": "blue", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u25ce", "textColor": "white"}
+            )
+            marker_c1cb55d744ebf8c8aa8a33445973c675.setIcon(beautify_icon_bca335725f656e09baab302cd40940f0);
+        
+    
+        var popup_af87b8836ed2f065562d1346cab9ecd4 = L.popup({"maxWidth": 200});
 
         
-            var html_7217f4db0a09c1a65f0089e7a69ef146 = $(`<div id="html_7217f4db0a09c1a65f0089e7a69ef146" style="width: 100.0%; height: 100.0%;">Georgia</div>`)[0];
-            popup_be50bd6f836d4b862bde30bd8696a520.setContent(html_7217f4db0a09c1a65f0089e7a69ef146);
+            var html_9e84048650b7a834ec8e04874e0de8be = $(`<div id="html_9e84048650b7a834ec8e04874e0de8be" style="width: 100.0%; height: 100.0%;"><b>Georgia</b><br>EU(非欧盟)</div>`)[0];
+            popup_af87b8836ed2f065562d1346cab9ecd4.setContent(html_9e84048650b7a834ec8e04874e0de8be);
         
 
-        circle_marker_55ce482cfe856c8cf3a8a6d0136287e6.bindPopup(popup_be50bd6f836d4b862bde30bd8696a520)
+        marker_c1cb55d744ebf8c8aa8a33445973c675.bindPopup(popup_af87b8836ed2f065562d1346cab9ecd4)
         ;
 
         
     
     
-            circle_marker_55ce482cfe856c8cf3a8a6d0136287e6.bindTooltip(
+            marker_c1cb55d744ebf8c8aa8a33445973c675.bindTooltip(
                 `<div>
-                     Georgia (EU(非欧盟))
+                     Georgia
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_145b4f73650d7d6b0737de8ab2c629d2 = L.circleMarker(
+            var marker_dbb508df92be695a07f91fd91bc064e4 = L.marker(
                 [64.1355, -21.8954],
-                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_8fe2d079d2ac43a582476e162098601e = L.popup({"maxWidth": "100%"});
+            var beautify_icon_a0886f9f6851aabdc6dbb0f62b026ed5 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "blue", "borderColor": "blue", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u25ce", "textColor": "white"}
+            )
+            marker_dbb508df92be695a07f91fd91bc064e4.setIcon(beautify_icon_a0886f9f6851aabdc6dbb0f62b026ed5);
+        
+    
+        var popup_8323d9f3f0bc7f43dd4d358fb6e1a941 = L.popup({"maxWidth": 200});
 
         
-            var html_6a3ac1cef8f0861c609782c6098e9326 = $(`<div id="html_6a3ac1cef8f0861c609782c6098e9326" style="width: 100.0%; height: 100.0%;">Iceland</div>`)[0];
-            popup_8fe2d079d2ac43a582476e162098601e.setContent(html_6a3ac1cef8f0861c609782c6098e9326);
+            var html_71d0c4d4e4b7ab1d79ab65ad6b8c6db3 = $(`<div id="html_71d0c4d4e4b7ab1d79ab65ad6b8c6db3" style="width: 100.0%; height: 100.0%;"><b>Iceland</b><br>EU(非欧盟)</div>`)[0];
+            popup_8323d9f3f0bc7f43dd4d358fb6e1a941.setContent(html_71d0c4d4e4b7ab1d79ab65ad6b8c6db3);
         
 
-        circle_marker_145b4f73650d7d6b0737de8ab2c629d2.bindPopup(popup_8fe2d079d2ac43a582476e162098601e)
+        marker_dbb508df92be695a07f91fd91bc064e4.bindPopup(popup_8323d9f3f0bc7f43dd4d358fb6e1a941)
         ;
 
         
     
     
-            circle_marker_145b4f73650d7d6b0737de8ab2c629d2.bindTooltip(
+            marker_dbb508df92be695a07f91fd91bc064e4.bindTooltip(
                 `<div>
-                     Iceland (EU(非欧盟))
+                     Iceland
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_f4501c1919812bb81dcf213a735fcfe2 = L.circleMarker(
+            var marker_13d48d3af798e46c24a18a7f2a93822c = L.marker(
                 [31.7683, 35.2137],
-                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_9b3ed159635b756ffdc681af7e4d1119 = L.popup({"maxWidth": "100%"});
+            var beautify_icon_e72eb725b1f31e060392863eb11ce6fa = new L.BeautifyIcon.icon(
+                {"backgroundColor": "blue", "borderColor": "blue", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u25ce", "textColor": "white"}
+            )
+            marker_13d48d3af798e46c24a18a7f2a93822c.setIcon(beautify_icon_e72eb725b1f31e060392863eb11ce6fa);
+        
+    
+        var popup_86c1218a181d0a778912342636a7aa6d = L.popup({"maxWidth": 200});
 
         
-            var html_3db89bc0b344fa9f314f0a3115c61cc6 = $(`<div id="html_3db89bc0b344fa9f314f0a3115c61cc6" style="width: 100.0%; height: 100.0%;">Israel</div>`)[0];
-            popup_9b3ed159635b756ffdc681af7e4d1119.setContent(html_3db89bc0b344fa9f314f0a3115c61cc6);
+            var html_8b5680b776302311eda64c7eef2e84af = $(`<div id="html_8b5680b776302311eda64c7eef2e84af" style="width: 100.0%; height: 100.0%;"><b>Israel</b><br>EU(非欧盟)</div>`)[0];
+            popup_86c1218a181d0a778912342636a7aa6d.setContent(html_8b5680b776302311eda64c7eef2e84af);
         
 
-        circle_marker_f4501c1919812bb81dcf213a735fcfe2.bindPopup(popup_9b3ed159635b756ffdc681af7e4d1119)
+        marker_13d48d3af798e46c24a18a7f2a93822c.bindPopup(popup_86c1218a181d0a778912342636a7aa6d)
         ;
 
         
     
     
-            circle_marker_f4501c1919812bb81dcf213a735fcfe2.bindTooltip(
+            marker_13d48d3af798e46c24a18a7f2a93822c.bindTooltip(
                 `<div>
-                     Israel (EU(非欧盟))
+                     Israel
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_1001b50655119c59bc6665214b3b621c = L.circleMarker(
+            var marker_269aa42a1d1fd78cf061dfa5678954c0 = L.marker(
                 [59.9139, 10.7522],
-                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_ebe82beda21ceef7467795199d347bef = L.popup({"maxWidth": "100%"});
+            var beautify_icon_d48a06446b8675fabee335b5414385c8 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "blue", "borderColor": "blue", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u25ce", "textColor": "white"}
+            )
+            marker_269aa42a1d1fd78cf061dfa5678954c0.setIcon(beautify_icon_d48a06446b8675fabee335b5414385c8);
+        
+    
+        var popup_b4113c1bb993d201fc2bc8ecad5216e6 = L.popup({"maxWidth": 200});
 
         
-            var html_4be7d9256f2338c54ef3043e1cf1f0d4 = $(`<div id="html_4be7d9256f2338c54ef3043e1cf1f0d4" style="width: 100.0%; height: 100.0%;">Norway</div>`)[0];
-            popup_ebe82beda21ceef7467795199d347bef.setContent(html_4be7d9256f2338c54ef3043e1cf1f0d4);
+            var html_43b126786af5926385289e5e7e01e751 = $(`<div id="html_43b126786af5926385289e5e7e01e751" style="width: 100.0%; height: 100.0%;"><b>Norway</b><br>EU(非欧盟)</div>`)[0];
+            popup_b4113c1bb993d201fc2bc8ecad5216e6.setContent(html_43b126786af5926385289e5e7e01e751);
         
 
-        circle_marker_1001b50655119c59bc6665214b3b621c.bindPopup(popup_ebe82beda21ceef7467795199d347bef)
+        marker_269aa42a1d1fd78cf061dfa5678954c0.bindPopup(popup_b4113c1bb993d201fc2bc8ecad5216e6)
         ;
 
         
     
     
-            circle_marker_1001b50655119c59bc6665214b3b621c.bindTooltip(
+            marker_269aa42a1d1fd78cf061dfa5678954c0.bindTooltip(
                 `<div>
-                     Norway (EU(非欧盟))
+                     Norway
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_0f49bedbbfecc8d23e9dd5f29080d4c7 = L.circleMarker(
+            var marker_1d61e5b9e8725bdd19e62d38a9a92856 = L.marker(
                 [55.7558, 37.6173],
-                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_5d6281eb0eb2172e9d09655db740f117 = L.popup({"maxWidth": "100%"});
+            var beautify_icon_499ca61acacdb653549be6a682bd34b3 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "blue", "borderColor": "blue", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u25ce", "textColor": "white"}
+            )
+            marker_1d61e5b9e8725bdd19e62d38a9a92856.setIcon(beautify_icon_499ca61acacdb653549be6a682bd34b3);
+        
+    
+        var popup_2a93c04af30cef40471adfe25c3581b3 = L.popup({"maxWidth": 200});
 
         
-            var html_19774ae50266aa0d2e5be6ce673af9ca = $(`<div id="html_19774ae50266aa0d2e5be6ce673af9ca" style="width: 100.0%; height: 100.0%;">Russia</div>`)[0];
-            popup_5d6281eb0eb2172e9d09655db740f117.setContent(html_19774ae50266aa0d2e5be6ce673af9ca);
+            var html_ee194a47e80e2c43067ff37033f25150 = $(`<div id="html_ee194a47e80e2c43067ff37033f25150" style="width: 100.0%; height: 100.0%;"><b>Russia</b><br>EU(非欧盟)</div>`)[0];
+            popup_2a93c04af30cef40471adfe25c3581b3.setContent(html_ee194a47e80e2c43067ff37033f25150);
         
 
-        circle_marker_0f49bedbbfecc8d23e9dd5f29080d4c7.bindPopup(popup_5d6281eb0eb2172e9d09655db740f117)
+        marker_1d61e5b9e8725bdd19e62d38a9a92856.bindPopup(popup_2a93c04af30cef40471adfe25c3581b3)
         ;
 
         
     
     
-            circle_marker_0f49bedbbfecc8d23e9dd5f29080d4c7.bindTooltip(
+            marker_1d61e5b9e8725bdd19e62d38a9a92856.bindTooltip(
                 `<div>
-                     Russia (EU(非欧盟))
+                     Russia
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_6f070dc44590be464b2e6dfaa77cec87 = L.circleMarker(
+            var marker_ef4fe9dc59316b5e82c60ccf3b24d549 = L.marker(
                 [44.7866, 20.4489],
-                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_2cde1bf243a0dfa7d2333430e809cf59 = L.popup({"maxWidth": "100%"});
+            var beautify_icon_f5afcf3f2426dab42baf6732ed20f1ed = new L.BeautifyIcon.icon(
+                {"backgroundColor": "blue", "borderColor": "blue", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u25ce", "textColor": "white"}
+            )
+            marker_ef4fe9dc59316b5e82c60ccf3b24d549.setIcon(beautify_icon_f5afcf3f2426dab42baf6732ed20f1ed);
+        
+    
+        var popup_1f0665632f5954de07fbfaa1d51b752e = L.popup({"maxWidth": 200});
 
         
-            var html_79d994c6a9c1c6f294df891331817ade = $(`<div id="html_79d994c6a9c1c6f294df891331817ade" style="width: 100.0%; height: 100.0%;">Serbia</div>`)[0];
-            popup_2cde1bf243a0dfa7d2333430e809cf59.setContent(html_79d994c6a9c1c6f294df891331817ade);
+            var html_44f2ef670d07530d474bdbe6472b6a23 = $(`<div id="html_44f2ef670d07530d474bdbe6472b6a23" style="width: 100.0%; height: 100.0%;"><b>Serbia</b><br>EU(非欧盟)</div>`)[0];
+            popup_1f0665632f5954de07fbfaa1d51b752e.setContent(html_44f2ef670d07530d474bdbe6472b6a23);
         
 
-        circle_marker_6f070dc44590be464b2e6dfaa77cec87.bindPopup(popup_2cde1bf243a0dfa7d2333430e809cf59)
+        marker_ef4fe9dc59316b5e82c60ccf3b24d549.bindPopup(popup_1f0665632f5954de07fbfaa1d51b752e)
         ;
 
         
     
     
-            circle_marker_6f070dc44590be464b2e6dfaa77cec87.bindTooltip(
+            marker_ef4fe9dc59316b5e82c60ccf3b24d549.bindTooltip(
                 `<div>
-                     Serbia (EU(非欧盟))
+                     Serbia
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_4dbccb4c7202a54691cbafa39f1a8176 = L.circleMarker(
+            var marker_ade51176a14f58bcfb4c892a811b18b9 = L.marker(
                 [42.4304, 19.2594],
-                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_c3ae4b5b4a3b918e22fc8c791ef7e10f = L.popup({"maxWidth": "100%"});
+            var beautify_icon_ab8f077ad061f7a86c34449baabf48d8 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "blue", "borderColor": "blue", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u25ce", "textColor": "white"}
+            )
+            marker_ade51176a14f58bcfb4c892a811b18b9.setIcon(beautify_icon_ab8f077ad061f7a86c34449baabf48d8);
+        
+    
+        var popup_a3694049994c1db6469c39d5076ca5ec = L.popup({"maxWidth": 200});
 
         
-            var html_47a10d6c6ec4baaab533471aee8ea423 = $(`<div id="html_47a10d6c6ec4baaab533471aee8ea423" style="width: 100.0%; height: 100.0%;">Montenegro</div>`)[0];
-            popup_c3ae4b5b4a3b918e22fc8c791ef7e10f.setContent(html_47a10d6c6ec4baaab533471aee8ea423);
+            var html_504ef9d59cd35097ebbd05566d51fea5 = $(`<div id="html_504ef9d59cd35097ebbd05566d51fea5" style="width: 100.0%; height: 100.0%;"><b>Montenegro</b><br>EU(非欧盟)</div>`)[0];
+            popup_a3694049994c1db6469c39d5076ca5ec.setContent(html_504ef9d59cd35097ebbd05566d51fea5);
         
 
-        circle_marker_4dbccb4c7202a54691cbafa39f1a8176.bindPopup(popup_c3ae4b5b4a3b918e22fc8c791ef7e10f)
+        marker_ade51176a14f58bcfb4c892a811b18b9.bindPopup(popup_a3694049994c1db6469c39d5076ca5ec)
         ;
 
         
     
     
-            circle_marker_4dbccb4c7202a54691cbafa39f1a8176.bindTooltip(
+            marker_ade51176a14f58bcfb4c892a811b18b9.bindTooltip(
                 `<div>
-                     Montenegro (EU(非欧盟))
+                     Montenegro
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_3f3b0a571e9b6647b9dd431984bc9332 = L.circleMarker(
+            var marker_6efa5932e8c11be21067e8a696ca9f3e = L.marker(
                 [46.9481, 7.4474],
-                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_9af0c41816885a7413e8ce08d2a09771 = L.popup({"maxWidth": "100%"});
+            var beautify_icon_68ba1abe5b392f6e27a5df5297e67609 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "blue", "borderColor": "blue", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u25ce", "textColor": "white"}
+            )
+            marker_6efa5932e8c11be21067e8a696ca9f3e.setIcon(beautify_icon_68ba1abe5b392f6e27a5df5297e67609);
+        
+    
+        var popup_8d8ab3aa0f7626fb5a239b7f33233a40 = L.popup({"maxWidth": 200});
 
         
-            var html_a51821db1b14036976e2d7c9b68de424 = $(`<div id="html_a51821db1b14036976e2d7c9b68de424" style="width: 100.0%; height: 100.0%;">Switzerland</div>`)[0];
-            popup_9af0c41816885a7413e8ce08d2a09771.setContent(html_a51821db1b14036976e2d7c9b68de424);
+            var html_feed10088b3b78a63b9712c82ec708dc = $(`<div id="html_feed10088b3b78a63b9712c82ec708dc" style="width: 100.0%; height: 100.0%;"><b>Switzerland</b><br>EU(非欧盟)</div>`)[0];
+            popup_8d8ab3aa0f7626fb5a239b7f33233a40.setContent(html_feed10088b3b78a63b9712c82ec708dc);
         
 
-        circle_marker_3f3b0a571e9b6647b9dd431984bc9332.bindPopup(popup_9af0c41816885a7413e8ce08d2a09771)
+        marker_6efa5932e8c11be21067e8a696ca9f3e.bindPopup(popup_8d8ab3aa0f7626fb5a239b7f33233a40)
         ;
 
         
     
     
-            circle_marker_3f3b0a571e9b6647b9dd431984bc9332.bindTooltip(
+            marker_6efa5932e8c11be21067e8a696ca9f3e.bindTooltip(
                 `<div>
-                     Switzerland (EU(非欧盟))
+                     Switzerland
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_d03c8becd06a247c9b64a126552029be = L.circleMarker(
+            var marker_4bc8cf27ac891759846650c88e44884f = L.marker(
                 [39.9208, 32.8541],
-                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_359dc355dd94ba5a4aafb54ab2d493e7 = L.popup({"maxWidth": "100%"});
+            var beautify_icon_9237684ed1ae3d8a2c4e42cedd87020b = new L.BeautifyIcon.icon(
+                {"backgroundColor": "blue", "borderColor": "blue", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u25ce", "textColor": "white"}
+            )
+            marker_4bc8cf27ac891759846650c88e44884f.setIcon(beautify_icon_9237684ed1ae3d8a2c4e42cedd87020b);
+        
+    
+        var popup_21d289645bbdeb12e63083768a7e14d2 = L.popup({"maxWidth": 200});
 
         
-            var html_cc6146819790884fc5e9eb73fbb55fe0 = $(`<div id="html_cc6146819790884fc5e9eb73fbb55fe0" style="width: 100.0%; height: 100.0%;">Turkey</div>`)[0];
-            popup_359dc355dd94ba5a4aafb54ab2d493e7.setContent(html_cc6146819790884fc5e9eb73fbb55fe0);
+            var html_6ada5a0e16135880d8276301980afc97 = $(`<div id="html_6ada5a0e16135880d8276301980afc97" style="width: 100.0%; height: 100.0%;"><b>Turkey</b><br>EU(非欧盟)</div>`)[0];
+            popup_21d289645bbdeb12e63083768a7e14d2.setContent(html_6ada5a0e16135880d8276301980afc97);
         
 
-        circle_marker_d03c8becd06a247c9b64a126552029be.bindPopup(popup_359dc355dd94ba5a4aafb54ab2d493e7)
+        marker_4bc8cf27ac891759846650c88e44884f.bindPopup(popup_21d289645bbdeb12e63083768a7e14d2)
         ;
 
         
     
     
-            circle_marker_d03c8becd06a247c9b64a126552029be.bindTooltip(
+            marker_4bc8cf27ac891759846650c88e44884f.bindTooltip(
                 `<div>
-                     Turkey (EU(非欧盟))
+                     Turkey
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_07580383c88ad7ba2560df3493f34888 = L.circleMarker(
+            var marker_35460584f7909e094ceee6a25d4a26d9 = L.marker(
                 [50.4501, 30.5234],
-                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_e3d92c825ddce337127ecf03df0718b3 = L.popup({"maxWidth": "100%"});
+            var beautify_icon_ea1f065e9bbd1474c3f62e10d85aecec = new L.BeautifyIcon.icon(
+                {"backgroundColor": "blue", "borderColor": "blue", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u25ce", "textColor": "white"}
+            )
+            marker_35460584f7909e094ceee6a25d4a26d9.setIcon(beautify_icon_ea1f065e9bbd1474c3f62e10d85aecec);
+        
+    
+        var popup_49c86bb12d146fc64eb9410eca014993 = L.popup({"maxWidth": 200});
 
         
-            var html_216263db71ca1b002f7d9c5177260b03 = $(`<div id="html_216263db71ca1b002f7d9c5177260b03" style="width: 100.0%; height: 100.0%;">Ukraine</div>`)[0];
-            popup_e3d92c825ddce337127ecf03df0718b3.setContent(html_216263db71ca1b002f7d9c5177260b03);
+            var html_25389bfceafe62e47a5676102fa292c6 = $(`<div id="html_25389bfceafe62e47a5676102fa292c6" style="width: 100.0%; height: 100.0%;"><b>Ukraine</b><br>EU(非欧盟)</div>`)[0];
+            popup_49c86bb12d146fc64eb9410eca014993.setContent(html_25389bfceafe62e47a5676102fa292c6);
         
 
-        circle_marker_07580383c88ad7ba2560df3493f34888.bindPopup(popup_e3d92c825ddce337127ecf03df0718b3)
+        marker_35460584f7909e094ceee6a25d4a26d9.bindPopup(popup_49c86bb12d146fc64eb9410eca014993)
         ;
 
         
     
     
-            circle_marker_07580383c88ad7ba2560df3493f34888.bindTooltip(
+            marker_35460584f7909e094ceee6a25d4a26d9.bindTooltip(
                 `<div>
-                     Ukraine (EU(非欧盟))
+                     Ukraine
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_709057d343463ac183e777a4e801384d = L.circleMarker(
+            var marker_6379e7a9a6e937b5bba91523f55353a0 = L.marker(
                 [24.4539, 54.3773],
-                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_1693e7c845b3dc1f9dd164765141b899 = L.popup({"maxWidth": "100%"});
+            var beautify_icon_d407efcded05723382706e3f22e03017 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "blue", "borderColor": "blue", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u25ce", "textColor": "white"}
+            )
+            marker_6379e7a9a6e937b5bba91523f55353a0.setIcon(beautify_icon_d407efcded05723382706e3f22e03017);
+        
+    
+        var popup_6bcbec4c20eec5126e1f21f378c4c92d = L.popup({"maxWidth": 200});
 
         
-            var html_167faf9d950ee2418852397763aa987b = $(`<div id="html_167faf9d950ee2418852397763aa987b" style="width: 100.0%; height: 100.0%;">United Arab Emirates</div>`)[0];
-            popup_1693e7c845b3dc1f9dd164765141b899.setContent(html_167faf9d950ee2418852397763aa987b);
+            var html_b03b5b441ea3a02d381e8dd44bd3c4e5 = $(`<div id="html_b03b5b441ea3a02d381e8dd44bd3c4e5" style="width: 100.0%; height: 100.0%;"><b>United Arab Emirates</b><br>EU(非欧盟)</div>`)[0];
+            popup_6bcbec4c20eec5126e1f21f378c4c92d.setContent(html_b03b5b441ea3a02d381e8dd44bd3c4e5);
         
 
-        circle_marker_709057d343463ac183e777a4e801384d.bindPopup(popup_1693e7c845b3dc1f9dd164765141b899)
+        marker_6379e7a9a6e937b5bba91523f55353a0.bindPopup(popup_6bcbec4c20eec5126e1f21f378c4c92d)
         ;
 
         
     
     
-            circle_marker_709057d343463ac183e777a4e801384d.bindTooltip(
+            marker_6379e7a9a6e937b5bba91523f55353a0.bindTooltip(
                 `<div>
-                     United Arab Emirates (EU(非欧盟))
+                     United Arab Emirates
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_85264fc8b6ddf7eb8b5455ee1bedf2ab = L.circleMarker(
+            var marker_7f3559ae4b5025d92ad4eb5bb6d3f842 = L.marker(
                 [51.5074, -0.1278],
-                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_f47f01296cfa5eb042bcb58015877b81 = L.popup({"maxWidth": "100%"});
+            var beautify_icon_d298e7e4f294e89c5e6895e815f682ac = new L.BeautifyIcon.icon(
+                {"backgroundColor": "blue", "borderColor": "blue", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u25ce", "textColor": "white"}
+            )
+            marker_7f3559ae4b5025d92ad4eb5bb6d3f842.setIcon(beautify_icon_d298e7e4f294e89c5e6895e815f682ac);
+        
+    
+        var popup_b14c5e8add8e28043b693a8341e04833 = L.popup({"maxWidth": 200});
 
         
-            var html_02244404ea2e838ae98d4ebcfabcd8da = $(`<div id="html_02244404ea2e838ae98d4ebcfabcd8da" style="width: 100.0%; height: 100.0%;">United Kingdom</div>`)[0];
-            popup_f47f01296cfa5eb042bcb58015877b81.setContent(html_02244404ea2e838ae98d4ebcfabcd8da);
+            var html_533756007a582ea9a0afdb39c30df990 = $(`<div id="html_533756007a582ea9a0afdb39c30df990" style="width: 100.0%; height: 100.0%;"><b>United Kingdom</b><br>EU(非欧盟)</div>`)[0];
+            popup_b14c5e8add8e28043b693a8341e04833.setContent(html_533756007a582ea9a0afdb39c30df990);
         
 
-        circle_marker_85264fc8b6ddf7eb8b5455ee1bedf2ab.bindPopup(popup_f47f01296cfa5eb042bcb58015877b81)
+        marker_7f3559ae4b5025d92ad4eb5bb6d3f842.bindPopup(popup_b14c5e8add8e28043b693a8341e04833)
         ;
 
         
     
     
-            circle_marker_85264fc8b6ddf7eb8b5455ee1bedf2ab.bindTooltip(
+            marker_7f3559ae4b5025d92ad4eb5bb6d3f842.bindTooltip(
                 `<div>
-                     United Kingdom (EU(非欧盟))
+                     United Kingdom
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_5c8004a5739b7fe268b957c960ad3514 = L.circleMarker(
+            var marker_13dfbac601279e946bd2467ebb6463c7 = L.marker(
                 [40.4093, 49.8671],
-                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_2ef0d2046cf7d69f8d9c4623c28e355e = L.popup({"maxWidth": "100%"});
+            var beautify_icon_3f8ae99c7d2421c0785e598ccfe807e8 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "blue", "borderColor": "blue", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u25ce", "textColor": "white"}
+            )
+            marker_13dfbac601279e946bd2467ebb6463c7.setIcon(beautify_icon_3f8ae99c7d2421c0785e598ccfe807e8);
+        
+    
+        var popup_644a02e0b5cb8aaf422c510c866338af = L.popup({"maxWidth": 200});
 
         
-            var html_85edf6cf1946953972539e8076343c6d = $(`<div id="html_85edf6cf1946953972539e8076343c6d" style="width: 100.0%; height: 100.0%;">Azerbaijan</div>`)[0];
-            popup_2ef0d2046cf7d69f8d9c4623c28e355e.setContent(html_85edf6cf1946953972539e8076343c6d);
+            var html_624691196bfce46047dcf00f6681b03d = $(`<div id="html_624691196bfce46047dcf00f6681b03d" style="width: 100.0%; height: 100.0%;"><b>Azerbaijan</b><br>EU(非欧盟)</div>`)[0];
+            popup_644a02e0b5cb8aaf422c510c866338af.setContent(html_624691196bfce46047dcf00f6681b03d);
         
 
-        circle_marker_5c8004a5739b7fe268b957c960ad3514.bindPopup(popup_2ef0d2046cf7d69f8d9c4623c28e355e)
+        marker_13dfbac601279e946bd2467ebb6463c7.bindPopup(popup_644a02e0b5cb8aaf422c510c866338af)
         ;
 
         
     
     
-            circle_marker_5c8004a5739b7fe268b957c960ad3514.bindTooltip(
+            marker_13dfbac601279e946bd2467ebb6463c7.bindTooltip(
                 `<div>
-                     Azerbaijan (EU(非欧盟))
+                     Azerbaijan
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_1dd7fb48f4f32d3acdc98705509df01b = L.circleMarker(
+            var marker_2942bad0b773c8a7e2fd123a08091183 = L.marker(
                 [42.6629, 21.1655],
-                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_6e4d7a357eb26f9043f039afa5c13d0e = L.popup({"maxWidth": "100%"});
+            var beautify_icon_018b798598c388696d5aca4dc4f50854 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "blue", "borderColor": "blue", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u25ce", "textColor": "white"}
+            )
+            marker_2942bad0b773c8a7e2fd123a08091183.setIcon(beautify_icon_018b798598c388696d5aca4dc4f50854);
+        
+    
+        var popup_7f16d95ea429ec94b2b0a4f28b3c6a61 = L.popup({"maxWidth": 200});
 
         
-            var html_18b9b57ea5bb4c4cd16c0a2adaed85a8 = $(`<div id="html_18b9b57ea5bb4c4cd16c0a2adaed85a8" style="width: 100.0%; height: 100.0%;">Kosovo</div>`)[0];
-            popup_6e4d7a357eb26f9043f039afa5c13d0e.setContent(html_18b9b57ea5bb4c4cd16c0a2adaed85a8);
+            var html_9313d600c904fedde56e3e22ea3430cd = $(`<div id="html_9313d600c904fedde56e3e22ea3430cd" style="width: 100.0%; height: 100.0%;"><b>Kosovo</b><br>EU(非欧盟)</div>`)[0];
+            popup_7f16d95ea429ec94b2b0a4f28b3c6a61.setContent(html_9313d600c904fedde56e3e22ea3430cd);
         
 
-        circle_marker_1dd7fb48f4f32d3acdc98705509df01b.bindPopup(popup_6e4d7a357eb26f9043f039afa5c13d0e)
+        marker_2942bad0b773c8a7e2fd123a08091183.bindPopup(popup_7f16d95ea429ec94b2b0a4f28b3c6a61)
         ;
 
         
     
     
-            circle_marker_1dd7fb48f4f32d3acdc98705509df01b.bindTooltip(
+            marker_2942bad0b773c8a7e2fd123a08091183.bindTooltip(
                 `<div>
-                     Kosovo (EU(非欧盟))
+                     Kosovo
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_e90a54d2574812e30d3a5f44e0f00479 = L.circleMarker(
+            var marker_06baf70cba0cb5f6388d755951d1d5a4 = L.marker(
                 [47.0105, 28.8638],
-                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_d12dd12e9b81c499ce6486391b054892 = L.popup({"maxWidth": "100%"});
+            var beautify_icon_dde6840a0a281a9804e1c4729a9c9d5d = new L.BeautifyIcon.icon(
+                {"backgroundColor": "blue", "borderColor": "blue", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u25ce", "textColor": "white"}
+            )
+            marker_06baf70cba0cb5f6388d755951d1d5a4.setIcon(beautify_icon_dde6840a0a281a9804e1c4729a9c9d5d);
+        
+    
+        var popup_90e2738c5255fbd993fd395e84f0ba29 = L.popup({"maxWidth": 200});
 
         
-            var html_181fd6fd7cfb92e4651242ad15f90145 = $(`<div id="html_181fd6fd7cfb92e4651242ad15f90145" style="width: 100.0%; height: 100.0%;">Moldova</div>`)[0];
-            popup_d12dd12e9b81c499ce6486391b054892.setContent(html_181fd6fd7cfb92e4651242ad15f90145);
+            var html_c50333a5b35cf80da4949f73b24cd43c = $(`<div id="html_c50333a5b35cf80da4949f73b24cd43c" style="width: 100.0%; height: 100.0%;"><b>Moldova</b><br>EU(非欧盟)</div>`)[0];
+            popup_90e2738c5255fbd993fd395e84f0ba29.setContent(html_c50333a5b35cf80da4949f73b24cd43c);
         
 
-        circle_marker_e90a54d2574812e30d3a5f44e0f00479.bindPopup(popup_d12dd12e9b81c499ce6486391b054892)
+        marker_06baf70cba0cb5f6388d755951d1d5a4.bindPopup(popup_90e2738c5255fbd993fd395e84f0ba29)
         ;
 
         
     
     
-            circle_marker_e90a54d2574812e30d3a5f44e0f00479.bindTooltip(
+            marker_06baf70cba0cb5f6388d755951d1d5a4.bindTooltip(
                 `<div>
-                     Moldova (EU(非欧盟))
+                     Moldova
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_cd82d1e06b300e28e0493bbb5e469dc3 = L.circleMarker(
+            var marker_8b3eb7ddad0b8b73e87707183cda5866 = L.marker(
                 [35.1856, 33.3823],
-                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_fd974674e39ce767b5909de9154a6123 = L.popup({"maxWidth": "100%"});
+            var beautify_icon_8320390a78bf7f0cda483c530c92c263 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "blue", "borderColor": "blue", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u25ce", "textColor": "white"}
+            )
+            marker_8b3eb7ddad0b8b73e87707183cda5866.setIcon(beautify_icon_8320390a78bf7f0cda483c530c92c263);
+        
+    
+        var popup_1de37cf95a190154035652f36e070ae5 = L.popup({"maxWidth": 200});
 
         
-            var html_aabfb9c54a2146ac2c9787285b333084 = $(`<div id="html_aabfb9c54a2146ac2c9787285b333084" style="width: 100.0%; height: 100.0%;">Cyprus</div>`)[0];
-            popup_fd974674e39ce767b5909de9154a6123.setContent(html_aabfb9c54a2146ac2c9787285b333084);
+            var html_78a53ab326b0c6234f3b3065e4b0087d = $(`<div id="html_78a53ab326b0c6234f3b3065e4b0087d" style="width: 100.0%; height: 100.0%;"><b>Cyprus</b><br>EU(非欧盟)</div>`)[0];
+            popup_1de37cf95a190154035652f36e070ae5.setContent(html_78a53ab326b0c6234f3b3065e4b0087d);
         
 
-        circle_marker_cd82d1e06b300e28e0493bbb5e469dc3.bindPopup(popup_fd974674e39ce767b5909de9154a6123)
+        marker_8b3eb7ddad0b8b73e87707183cda5866.bindPopup(popup_1de37cf95a190154035652f36e070ae5)
         ;
 
         
     
     
-            circle_marker_cd82d1e06b300e28e0493bbb5e469dc3.bindTooltip(
+            marker_8b3eb7ddad0b8b73e87707183cda5866.bindTooltip(
                 `<div>
-                     Cyprus (EU(非欧盟))
+                     Cyprus
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_c44392faf7064973719c97b5bb6cb1c2 = L.circleMarker(
+            var marker_e18b06e13e3f9519a3f7382fd1a6b946 = L.marker(
                 [50.8503, 4.3517],
-                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_eb2a2872828519db5321cbc111b11704 = L.popup({"maxWidth": "100%"});
+            var beautify_icon_1409eafdc3491fda308da2eaa95ba2bd = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_e18b06e13e3f9519a3f7382fd1a6b946.setIcon(beautify_icon_1409eafdc3491fda308da2eaa95ba2bd);
+        
+    
+        var popup_8a401b288648365be75fd3fea94bd29c = L.popup({"maxWidth": 200});
 
         
-            var html_6e3500aa58a71eb2dc8d7265823770f3 = $(`<div id="html_6e3500aa58a71eb2dc8d7265823770f3" style="width: 100.0%; height: 100.0%;">Belgium</div>`)[0];
-            popup_eb2a2872828519db5321cbc111b11704.setContent(html_6e3500aa58a71eb2dc8d7265823770f3);
+            var html_c0829713fb61cd4fb98d0a510d1990b8 = $(`<div id="html_c0829713fb61cd4fb98d0a510d1990b8" style="width: 100.0%; height: 100.0%;"><b>Belgium</b><br>EU(欧盟)</div>`)[0];
+            popup_8a401b288648365be75fd3fea94bd29c.setContent(html_c0829713fb61cd4fb98d0a510d1990b8);
         
 
-        circle_marker_c44392faf7064973719c97b5bb6cb1c2.bindPopup(popup_eb2a2872828519db5321cbc111b11704)
+        marker_e18b06e13e3f9519a3f7382fd1a6b946.bindPopup(popup_8a401b288648365be75fd3fea94bd29c)
         ;
 
         
     
     
-            circle_marker_c44392faf7064973719c97b5bb6cb1c2.bindTooltip(
+            marker_e18b06e13e3f9519a3f7382fd1a6b946.bindTooltip(
                 `<div>
-                     Belgium (EU(欧盟))
+                     Belgium
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_3070e0060c7a2935643079556169a3cd = L.circleMarker(
+            var marker_b7663c1db665d77f4519e5384e162334 = L.marker(
                 [42.6977, 23.3219],
-                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_b7a2af7179bba69dbaca5efbc8b8658d = L.popup({"maxWidth": "100%"});
+            var beautify_icon_e4a9f6925091f8ba01f4602bde4f55a1 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_b7663c1db665d77f4519e5384e162334.setIcon(beautify_icon_e4a9f6925091f8ba01f4602bde4f55a1);
+        
+    
+        var popup_5eba6af17834933da8f631bd7015b25f = L.popup({"maxWidth": 200});
 
         
-            var html_5ea0418cd2a9a6678c0e8dccaadec53b = $(`<div id="html_5ea0418cd2a9a6678c0e8dccaadec53b" style="width: 100.0%; height: 100.0%;">Bulgaria</div>`)[0];
-            popup_b7a2af7179bba69dbaca5efbc8b8658d.setContent(html_5ea0418cd2a9a6678c0e8dccaadec53b);
+            var html_503aeb7b1f6dc15ede6af5e49239ef40 = $(`<div id="html_503aeb7b1f6dc15ede6af5e49239ef40" style="width: 100.0%; height: 100.0%;"><b>Bulgaria</b><br>EU(欧盟)</div>`)[0];
+            popup_5eba6af17834933da8f631bd7015b25f.setContent(html_503aeb7b1f6dc15ede6af5e49239ef40);
         
 
-        circle_marker_3070e0060c7a2935643079556169a3cd.bindPopup(popup_b7a2af7179bba69dbaca5efbc8b8658d)
+        marker_b7663c1db665d77f4519e5384e162334.bindPopup(popup_5eba6af17834933da8f631bd7015b25f)
         ;
 
         
     
     
-            circle_marker_3070e0060c7a2935643079556169a3cd.bindTooltip(
+            marker_b7663c1db665d77f4519e5384e162334.bindTooltip(
                 `<div>
-                     Bulgaria (EU(欧盟))
+                     Bulgaria
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_84d657e9d1c39cceb986f5a846d98de3 = L.circleMarker(
+            var marker_ef7f4bf88d978ca099a36ebb92a342da = L.marker(
                 [45.815, 15.9819],
-                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_f26a927a919194deb8eb83399c218b77 = L.popup({"maxWidth": "100%"});
+            var beautify_icon_c2aac13fb8dea7571c04ab52a7c4ed44 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_ef7f4bf88d978ca099a36ebb92a342da.setIcon(beautify_icon_c2aac13fb8dea7571c04ab52a7c4ed44);
+        
+    
+        var popup_0d250a224af7cf0095d32d5263f9e8c6 = L.popup({"maxWidth": 200});
 
         
-            var html_0c8d7c9b31fa1c0ee06054637111bb11 = $(`<div id="html_0c8d7c9b31fa1c0ee06054637111bb11" style="width: 100.0%; height: 100.0%;">Croatia</div>`)[0];
-            popup_f26a927a919194deb8eb83399c218b77.setContent(html_0c8d7c9b31fa1c0ee06054637111bb11);
+            var html_40006ac3561cee82333fc04d85131232 = $(`<div id="html_40006ac3561cee82333fc04d85131232" style="width: 100.0%; height: 100.0%;"><b>Croatia</b><br>EU(欧盟)</div>`)[0];
+            popup_0d250a224af7cf0095d32d5263f9e8c6.setContent(html_40006ac3561cee82333fc04d85131232);
         
 
-        circle_marker_84d657e9d1c39cceb986f5a846d98de3.bindPopup(popup_f26a927a919194deb8eb83399c218b77)
+        marker_ef7f4bf88d978ca099a36ebb92a342da.bindPopup(popup_0d250a224af7cf0095d32d5263f9e8c6)
         ;
 
         
     
     
-            circle_marker_84d657e9d1c39cceb986f5a846d98de3.bindTooltip(
+            marker_ef7f4bf88d978ca099a36ebb92a342da.bindTooltip(
                 `<div>
-                     Croatia (EU(欧盟))
+                     Croatia
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_b2643d3b5588b9707bb9b72cbaa550f0 = L.circleMarker(
+            var marker_f5543b0afc4f70d6cd215a3f779d4d2b = L.marker(
                 [55.6761, 12.5683],
-                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_ff05612bb5d9d4c41355b2346d370f6b = L.popup({"maxWidth": "100%"});
+            var beautify_icon_2e1aae64336e31269451351b5a67f3b4 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_f5543b0afc4f70d6cd215a3f779d4d2b.setIcon(beautify_icon_2e1aae64336e31269451351b5a67f3b4);
+        
+    
+        var popup_cde7b745ea90641b952dce15984f64cb = L.popup({"maxWidth": 200});
 
         
-            var html_512968611832b21c257cd49602d4435f = $(`<div id="html_512968611832b21c257cd49602d4435f" style="width: 100.0%; height: 100.0%;">Denmark</div>`)[0];
-            popup_ff05612bb5d9d4c41355b2346d370f6b.setContent(html_512968611832b21c257cd49602d4435f);
+            var html_b014119916b77b94078e68cc801346f7 = $(`<div id="html_b014119916b77b94078e68cc801346f7" style="width: 100.0%; height: 100.0%;"><b>Denmark</b><br>EU(欧盟)</div>`)[0];
+            popup_cde7b745ea90641b952dce15984f64cb.setContent(html_b014119916b77b94078e68cc801346f7);
         
 
-        circle_marker_b2643d3b5588b9707bb9b72cbaa550f0.bindPopup(popup_ff05612bb5d9d4c41355b2346d370f6b)
+        marker_f5543b0afc4f70d6cd215a3f779d4d2b.bindPopup(popup_cde7b745ea90641b952dce15984f64cb)
         ;
 
         
     
     
-            circle_marker_b2643d3b5588b9707bb9b72cbaa550f0.bindTooltip(
+            marker_f5543b0afc4f70d6cd215a3f779d4d2b.bindTooltip(
                 `<div>
-                     Denmark (EU(欧盟))
+                     Denmark
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_86b733afbc23b6974ab0ae6d9e4d02b5 = L.circleMarker(
+            var marker_871f00ebb2b8ef2190a3f1fa64a708ed = L.marker(
                 [59.437, 24.7536],
-                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_9249d04994fe5e9a654a0ff04acbac37 = L.popup({"maxWidth": "100%"});
+            var beautify_icon_a44709562720fd8fd80476c33b161d68 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_871f00ebb2b8ef2190a3f1fa64a708ed.setIcon(beautify_icon_a44709562720fd8fd80476c33b161d68);
+        
+    
+        var popup_5aa9a498ab416768274d98877fd76a98 = L.popup({"maxWidth": 200});
 
         
-            var html_3bb0018ee5fa4c28297a876f998ffdd9 = $(`<div id="html_3bb0018ee5fa4c28297a876f998ffdd9" style="width: 100.0%; height: 100.0%;">Estonia</div>`)[0];
-            popup_9249d04994fe5e9a654a0ff04acbac37.setContent(html_3bb0018ee5fa4c28297a876f998ffdd9);
+            var html_eb7d7ec3b406604481439c74620d8849 = $(`<div id="html_eb7d7ec3b406604481439c74620d8849" style="width: 100.0%; height: 100.0%;"><b>Estonia</b><br>EU(欧盟)</div>`)[0];
+            popup_5aa9a498ab416768274d98877fd76a98.setContent(html_eb7d7ec3b406604481439c74620d8849);
         
 
-        circle_marker_86b733afbc23b6974ab0ae6d9e4d02b5.bindPopup(popup_9249d04994fe5e9a654a0ff04acbac37)
+        marker_871f00ebb2b8ef2190a3f1fa64a708ed.bindPopup(popup_5aa9a498ab416768274d98877fd76a98)
         ;
 
         
     
     
-            circle_marker_86b733afbc23b6974ab0ae6d9e4d02b5.bindTooltip(
+            marker_871f00ebb2b8ef2190a3f1fa64a708ed.bindTooltip(
                 `<div>
-                     Estonia (EU(欧盟))
+                     Estonia
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_4d51f351b8d71b45b72c2108528ce264 = L.circleMarker(
+            var marker_3757de85d25d708a21f64169c0e6f10f = L.marker(
                 [60.1695, 24.9354],
-                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_f493bf32c742b4cc6acbf9e0db3e718a = L.popup({"maxWidth": "100%"});
+            var beautify_icon_d88614fa9eacc554abf0279dabaf1eab = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_3757de85d25d708a21f64169c0e6f10f.setIcon(beautify_icon_d88614fa9eacc554abf0279dabaf1eab);
+        
+    
+        var popup_008d8371858f2d8389f745774a471bf0 = L.popup({"maxWidth": 200});
 
         
-            var html_7713f10bd9cea483238ca8150b766606 = $(`<div id="html_7713f10bd9cea483238ca8150b766606" style="width: 100.0%; height: 100.0%;">Finland</div>`)[0];
-            popup_f493bf32c742b4cc6acbf9e0db3e718a.setContent(html_7713f10bd9cea483238ca8150b766606);
+            var html_ad612205ba3bee44be56c124c858a20f = $(`<div id="html_ad612205ba3bee44be56c124c858a20f" style="width: 100.0%; height: 100.0%;"><b>Finland</b><br>EU(欧盟)</div>`)[0];
+            popup_008d8371858f2d8389f745774a471bf0.setContent(html_ad612205ba3bee44be56c124c858a20f);
         
 
-        circle_marker_4d51f351b8d71b45b72c2108528ce264.bindPopup(popup_f493bf32c742b4cc6acbf9e0db3e718a)
+        marker_3757de85d25d708a21f64169c0e6f10f.bindPopup(popup_008d8371858f2d8389f745774a471bf0)
         ;
 
         
     
     
-            circle_marker_4d51f351b8d71b45b72c2108528ce264.bindTooltip(
+            marker_3757de85d25d708a21f64169c0e6f10f.bindTooltip(
                 `<div>
-                     Finland (EU(欧盟))
+                     Finland
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_a8bc1f635e3927f6bc76bd044700623f = L.circleMarker(
+            var marker_1c7f86c29d63eee0d3481a2ad0e45037 = L.marker(
                 [48.8566, 2.3522],
-                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_0a514c67955e4d3ce4115e9f93a21ecd = L.popup({"maxWidth": "100%"});
+            var beautify_icon_eb7302782e93a274874d76bb86913b29 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_1c7f86c29d63eee0d3481a2ad0e45037.setIcon(beautify_icon_eb7302782e93a274874d76bb86913b29);
+        
+    
+        var popup_42f7ad2a74b11d1b3cd155ef1d52a328 = L.popup({"maxWidth": 200});
 
         
-            var html_f4dff76df4c89ece8d2b18adb1a816d6 = $(`<div id="html_f4dff76df4c89ece8d2b18adb1a816d6" style="width: 100.0%; height: 100.0%;">France</div>`)[0];
-            popup_0a514c67955e4d3ce4115e9f93a21ecd.setContent(html_f4dff76df4c89ece8d2b18adb1a816d6);
+            var html_893523e14870c972576108cb9d8f1dd3 = $(`<div id="html_893523e14870c972576108cb9d8f1dd3" style="width: 100.0%; height: 100.0%;"><b>France</b><br>EU(欧盟)</div>`)[0];
+            popup_42f7ad2a74b11d1b3cd155ef1d52a328.setContent(html_893523e14870c972576108cb9d8f1dd3);
         
 
-        circle_marker_a8bc1f635e3927f6bc76bd044700623f.bindPopup(popup_0a514c67955e4d3ce4115e9f93a21ecd)
+        marker_1c7f86c29d63eee0d3481a2ad0e45037.bindPopup(popup_42f7ad2a74b11d1b3cd155ef1d52a328)
         ;
 
         
     
     
-            circle_marker_a8bc1f635e3927f6bc76bd044700623f.bindTooltip(
+            marker_1c7f86c29d63eee0d3481a2ad0e45037.bindTooltip(
                 `<div>
-                     France (EU(欧盟))
+                     France
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_d136422fcbd852fa80c12f59d79f90db = L.circleMarker(
+            var marker_12c67ca0f8c5db6db12fc713e071b1a8 = L.marker(
                 [52.52, 13.405],
-                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_779fb998f5e079eacbc0e05f231e0ac4 = L.popup({"maxWidth": "100%"});
+            var beautify_icon_fd24a027f65091c3b8c7195f76753a0b = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_12c67ca0f8c5db6db12fc713e071b1a8.setIcon(beautify_icon_fd24a027f65091c3b8c7195f76753a0b);
+        
+    
+        var popup_92f162ed33529466a29f91c78a1595a7 = L.popup({"maxWidth": 200});
 
         
-            var html_d8ac36e48bcffc6c01d1fa25990b9346 = $(`<div id="html_d8ac36e48bcffc6c01d1fa25990b9346" style="width: 100.0%; height: 100.0%;">Germany</div>`)[0];
-            popup_779fb998f5e079eacbc0e05f231e0ac4.setContent(html_d8ac36e48bcffc6c01d1fa25990b9346);
+            var html_9b025cdb45c7565449859268a52624ae = $(`<div id="html_9b025cdb45c7565449859268a52624ae" style="width: 100.0%; height: 100.0%;"><b>Germany</b><br>EU(欧盟)</div>`)[0];
+            popup_92f162ed33529466a29f91c78a1595a7.setContent(html_9b025cdb45c7565449859268a52624ae);
         
 
-        circle_marker_d136422fcbd852fa80c12f59d79f90db.bindPopup(popup_779fb998f5e079eacbc0e05f231e0ac4)
+        marker_12c67ca0f8c5db6db12fc713e071b1a8.bindPopup(popup_92f162ed33529466a29f91c78a1595a7)
         ;
 
         
     
     
-            circle_marker_d136422fcbd852fa80c12f59d79f90db.bindTooltip(
+            marker_12c67ca0f8c5db6db12fc713e071b1a8.bindTooltip(
                 `<div>
-                     Germany (EU(欧盟))
+                     Germany
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_5e0bc81a6380dd3b958a037df25d5403 = L.circleMarker(
+            var marker_3169c169f5a1da016ccb64ee8f5b95c0 = L.marker(
                 [37.9838, 23.7275],
-                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_763a7df14eedcebb0a121d26c3635256 = L.popup({"maxWidth": "100%"});
+            var beautify_icon_4004484e68dc5fe791015e249f399060 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_3169c169f5a1da016ccb64ee8f5b95c0.setIcon(beautify_icon_4004484e68dc5fe791015e249f399060);
+        
+    
+        var popup_808367b90e87e2ae677f9582a1312112 = L.popup({"maxWidth": 200});
 
         
-            var html_bf2ac2c1ead825d35df7ff61216330bf = $(`<div id="html_bf2ac2c1ead825d35df7ff61216330bf" style="width: 100.0%; height: 100.0%;">Greece</div>`)[0];
-            popup_763a7df14eedcebb0a121d26c3635256.setContent(html_bf2ac2c1ead825d35df7ff61216330bf);
+            var html_e9b2a20b224b9f3e664dc3766aa3748b = $(`<div id="html_e9b2a20b224b9f3e664dc3766aa3748b" style="width: 100.0%; height: 100.0%;"><b>Greece</b><br>EU(欧盟)</div>`)[0];
+            popup_808367b90e87e2ae677f9582a1312112.setContent(html_e9b2a20b224b9f3e664dc3766aa3748b);
         
 
-        circle_marker_5e0bc81a6380dd3b958a037df25d5403.bindPopup(popup_763a7df14eedcebb0a121d26c3635256)
+        marker_3169c169f5a1da016ccb64ee8f5b95c0.bindPopup(popup_808367b90e87e2ae677f9582a1312112)
         ;
 
         
     
     
-            circle_marker_5e0bc81a6380dd3b958a037df25d5403.bindTooltip(
+            marker_3169c169f5a1da016ccb64ee8f5b95c0.bindTooltip(
                 `<div>
-                     Greece (EU(欧盟))
+                     Greece
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_d8e71f8ca387d7e1606e810bffc48196 = L.circleMarker(
+            var marker_876cff0bab276aeff865889817ddffe1 = L.marker(
                 [47.4979, 19.0402],
-                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_7bc7f456034d4f76c44fc0c940bfef8d = L.popup({"maxWidth": "100%"});
+            var beautify_icon_8082e686f6a69c86a6184cc546ff6c47 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_876cff0bab276aeff865889817ddffe1.setIcon(beautify_icon_8082e686f6a69c86a6184cc546ff6c47);
+        
+    
+        var popup_ae5c969b771a5e6b99c75558e8f5fb9b = L.popup({"maxWidth": 200});
 
         
-            var html_10ce7b57cece42d1e44af7c67296d6a8 = $(`<div id="html_10ce7b57cece42d1e44af7c67296d6a8" style="width: 100.0%; height: 100.0%;">Hungary</div>`)[0];
-            popup_7bc7f456034d4f76c44fc0c940bfef8d.setContent(html_10ce7b57cece42d1e44af7c67296d6a8);
+            var html_65781f8e2714feb5206268c9a651176b = $(`<div id="html_65781f8e2714feb5206268c9a651176b" style="width: 100.0%; height: 100.0%;"><b>Hungary</b><br>EU(欧盟)</div>`)[0];
+            popup_ae5c969b771a5e6b99c75558e8f5fb9b.setContent(html_65781f8e2714feb5206268c9a651176b);
         
 
-        circle_marker_d8e71f8ca387d7e1606e810bffc48196.bindPopup(popup_7bc7f456034d4f76c44fc0c940bfef8d)
+        marker_876cff0bab276aeff865889817ddffe1.bindPopup(popup_ae5c969b771a5e6b99c75558e8f5fb9b)
         ;
 
         
     
     
-            circle_marker_d8e71f8ca387d7e1606e810bffc48196.bindTooltip(
+            marker_876cff0bab276aeff865889817ddffe1.bindTooltip(
                 `<div>
-                     Hungary (EU(欧盟))
+                     Hungary
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_55ced08f134399f69a3d79d3f94187c9 = L.circleMarker(
+            var marker_da6e152519af20d3249d27020685b056 = L.marker(
                 [53.3498, -6.2603],
-                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_e0c169d24aaa549403db82cb9527604c = L.popup({"maxWidth": "100%"});
+            var beautify_icon_ef721ae969b35ced4955fd54afd03bae = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_da6e152519af20d3249d27020685b056.setIcon(beautify_icon_ef721ae969b35ced4955fd54afd03bae);
+        
+    
+        var popup_efd9fe415b4a5efb6de33487bab68263 = L.popup({"maxWidth": 200});
 
         
-            var html_4783e7c8ddcf347c25e78a5b028d5cec = $(`<div id="html_4783e7c8ddcf347c25e78a5b028d5cec" style="width: 100.0%; height: 100.0%;">Ireland</div>`)[0];
-            popup_e0c169d24aaa549403db82cb9527604c.setContent(html_4783e7c8ddcf347c25e78a5b028d5cec);
+            var html_d84270788cbcc1736ea2b2600fd3471e = $(`<div id="html_d84270788cbcc1736ea2b2600fd3471e" style="width: 100.0%; height: 100.0%;"><b>Ireland</b><br>EU(欧盟)</div>`)[0];
+            popup_efd9fe415b4a5efb6de33487bab68263.setContent(html_d84270788cbcc1736ea2b2600fd3471e);
         
 
-        circle_marker_55ced08f134399f69a3d79d3f94187c9.bindPopup(popup_e0c169d24aaa549403db82cb9527604c)
+        marker_da6e152519af20d3249d27020685b056.bindPopup(popup_efd9fe415b4a5efb6de33487bab68263)
         ;
 
         
     
     
-            circle_marker_55ced08f134399f69a3d79d3f94187c9.bindTooltip(
+            marker_da6e152519af20d3249d27020685b056.bindTooltip(
                 `<div>
-                     Ireland (EU(欧盟))
+                     Ireland
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_1bda9ae3495bf54931112d07eedb154d = L.circleMarker(
+            var marker_c567106cf713015884369d21765d8612 = L.marker(
                 [41.9028, 12.4964],
-                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_da68aa494346c3e016362fe53ccdb0e8 = L.popup({"maxWidth": "100%"});
+            var beautify_icon_412d887ab5bb8b673a7e755f19b6b26e = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_c567106cf713015884369d21765d8612.setIcon(beautify_icon_412d887ab5bb8b673a7e755f19b6b26e);
+        
+    
+        var popup_21089d66a1ce1fc993254b72bb3e4c0f = L.popup({"maxWidth": 200});
 
         
-            var html_5276a7b1f444309a2615810d28491773 = $(`<div id="html_5276a7b1f444309a2615810d28491773" style="width: 100.0%; height: 100.0%;">Italy</div>`)[0];
-            popup_da68aa494346c3e016362fe53ccdb0e8.setContent(html_5276a7b1f444309a2615810d28491773);
+            var html_a111dac499afa3a8458b2f9bc1af1d3c = $(`<div id="html_a111dac499afa3a8458b2f9bc1af1d3c" style="width: 100.0%; height: 100.0%;"><b>Italy</b><br>EU(欧盟)</div>`)[0];
+            popup_21089d66a1ce1fc993254b72bb3e4c0f.setContent(html_a111dac499afa3a8458b2f9bc1af1d3c);
         
 
-        circle_marker_1bda9ae3495bf54931112d07eedb154d.bindPopup(popup_da68aa494346c3e016362fe53ccdb0e8)
+        marker_c567106cf713015884369d21765d8612.bindPopup(popup_21089d66a1ce1fc993254b72bb3e4c0f)
         ;
 
         
     
     
-            circle_marker_1bda9ae3495bf54931112d07eedb154d.bindTooltip(
+            marker_c567106cf713015884369d21765d8612.bindTooltip(
                 `<div>
-                     Italy (EU(欧盟))
+                     Italy
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_81484aa998862f2bc9f0227622e2a7e2 = L.circleMarker(
+            var marker_917a5a85f563999d68ceca17d40eac4a = L.marker(
                 [56.9496, 24.1052],
-                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_c769e6b1804118b28f0e2dcd1d14c976 = L.popup({"maxWidth": "100%"});
+            var beautify_icon_ab54f3da335b2124032f3a6db4dd8ff5 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_917a5a85f563999d68ceca17d40eac4a.setIcon(beautify_icon_ab54f3da335b2124032f3a6db4dd8ff5);
+        
+    
+        var popup_464f57843b814e747db7a1866165ce13 = L.popup({"maxWidth": 200});
 
         
-            var html_9c88db2d8c3f3c5bd618fefe1bbeafb5 = $(`<div id="html_9c88db2d8c3f3c5bd618fefe1bbeafb5" style="width: 100.0%; height: 100.0%;">Latvia</div>`)[0];
-            popup_c769e6b1804118b28f0e2dcd1d14c976.setContent(html_9c88db2d8c3f3c5bd618fefe1bbeafb5);
+            var html_544043d3d2e216243412b989ec7cf632 = $(`<div id="html_544043d3d2e216243412b989ec7cf632" style="width: 100.0%; height: 100.0%;"><b>Latvia</b><br>EU(欧盟)</div>`)[0];
+            popup_464f57843b814e747db7a1866165ce13.setContent(html_544043d3d2e216243412b989ec7cf632);
         
 
-        circle_marker_81484aa998862f2bc9f0227622e2a7e2.bindPopup(popup_c769e6b1804118b28f0e2dcd1d14c976)
+        marker_917a5a85f563999d68ceca17d40eac4a.bindPopup(popup_464f57843b814e747db7a1866165ce13)
         ;
 
         
     
     
-            circle_marker_81484aa998862f2bc9f0227622e2a7e2.bindTooltip(
+            marker_917a5a85f563999d68ceca17d40eac4a.bindTooltip(
                 `<div>
-                     Latvia (EU(欧盟))
+                     Latvia
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_95540287d4c0467b96d30527081f8f51 = L.circleMarker(
+            var marker_b629a72f2ef5a21403845d7d1568afc9 = L.marker(
                 [54.6872, 25.2797],
-                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_8b66b721e659314c32113e49cfb673b0 = L.popup({"maxWidth": "100%"});
+            var beautify_icon_0f7a0f8985c2f9a58972cafd6c3c6a19 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_b629a72f2ef5a21403845d7d1568afc9.setIcon(beautify_icon_0f7a0f8985c2f9a58972cafd6c3c6a19);
+        
+    
+        var popup_d80e845b0141d15519d8100d211637cb = L.popup({"maxWidth": 200});
 
         
-            var html_617ade98f26b77dfbc1dc43212ffee9a = $(`<div id="html_617ade98f26b77dfbc1dc43212ffee9a" style="width: 100.0%; height: 100.0%;">Lithuania</div>`)[0];
-            popup_8b66b721e659314c32113e49cfb673b0.setContent(html_617ade98f26b77dfbc1dc43212ffee9a);
+            var html_0d8b8cf718465d25fccd5958b8030e66 = $(`<div id="html_0d8b8cf718465d25fccd5958b8030e66" style="width: 100.0%; height: 100.0%;"><b>Lithuania</b><br>EU(欧盟)</div>`)[0];
+            popup_d80e845b0141d15519d8100d211637cb.setContent(html_0d8b8cf718465d25fccd5958b8030e66);
         
 
-        circle_marker_95540287d4c0467b96d30527081f8f51.bindPopup(popup_8b66b721e659314c32113e49cfb673b0)
+        marker_b629a72f2ef5a21403845d7d1568afc9.bindPopup(popup_d80e845b0141d15519d8100d211637cb)
         ;
 
         
     
     
-            circle_marker_95540287d4c0467b96d30527081f8f51.bindTooltip(
+            marker_b629a72f2ef5a21403845d7d1568afc9.bindTooltip(
                 `<div>
-                     Lithuania (EU(欧盟))
+                     Lithuania
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_1bc707f7044206d6ccd12199a51cb28d = L.circleMarker(
+            var marker_1952a579f51560c9f0c84a6c658d1f7d = L.marker(
                 [35.8997, 14.5146],
-                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_99ae77a7511a833019633637aad2f38f = L.popup({"maxWidth": "100%"});
+            var beautify_icon_82c7bbbb1d0038b3c6361e501ec1dc05 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_1952a579f51560c9f0c84a6c658d1f7d.setIcon(beautify_icon_82c7bbbb1d0038b3c6361e501ec1dc05);
+        
+    
+        var popup_ac63b05072ab090562e3ff185068c19b = L.popup({"maxWidth": 200});
 
         
-            var html_1f2079ec2be8be201f9d5972ae7db15f = $(`<div id="html_1f2079ec2be8be201f9d5972ae7db15f" style="width: 100.0%; height: 100.0%;">Malta</div>`)[0];
-            popup_99ae77a7511a833019633637aad2f38f.setContent(html_1f2079ec2be8be201f9d5972ae7db15f);
+            var html_81012eb36f0c22a1e1fe7ab2a7621edf = $(`<div id="html_81012eb36f0c22a1e1fe7ab2a7621edf" style="width: 100.0%; height: 100.0%;"><b>Malta</b><br>EU(欧盟)</div>`)[0];
+            popup_ac63b05072ab090562e3ff185068c19b.setContent(html_81012eb36f0c22a1e1fe7ab2a7621edf);
         
 
-        circle_marker_1bc707f7044206d6ccd12199a51cb28d.bindPopup(popup_99ae77a7511a833019633637aad2f38f)
+        marker_1952a579f51560c9f0c84a6c658d1f7d.bindPopup(popup_ac63b05072ab090562e3ff185068c19b)
         ;
 
         
     
     
-            circle_marker_1bc707f7044206d6ccd12199a51cb28d.bindTooltip(
+            marker_1952a579f51560c9f0c84a6c658d1f7d.bindTooltip(
                 `<div>
-                     Malta (EU(欧盟))
+                     Malta
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_540b0fd28b42d072961b8909de6d7d55 = L.circleMarker(
+            var marker_6d1b9ff5e7dc6a36871433f9dae1250c = L.marker(
                 [52.3676, 4.9041],
-                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_e095f8724179f4624e9e85b0d9f6c410 = L.popup({"maxWidth": "100%"});
+            var beautify_icon_de3beaced7b510941b6f1404e65eb826 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_6d1b9ff5e7dc6a36871433f9dae1250c.setIcon(beautify_icon_de3beaced7b510941b6f1404e65eb826);
+        
+    
+        var popup_bdde8c8edf8cdfd3cef069218f900118 = L.popup({"maxWidth": 200});
 
         
-            var html_33545c090069b3e75a7b1f646adc3e02 = $(`<div id="html_33545c090069b3e75a7b1f646adc3e02" style="width: 100.0%; height: 100.0%;">Netherlands</div>`)[0];
-            popup_e095f8724179f4624e9e85b0d9f6c410.setContent(html_33545c090069b3e75a7b1f646adc3e02);
+            var html_ffab30d33b3a06db9847becba02287e4 = $(`<div id="html_ffab30d33b3a06db9847becba02287e4" style="width: 100.0%; height: 100.0%;"><b>Netherlands</b><br>EU(欧盟)</div>`)[0];
+            popup_bdde8c8edf8cdfd3cef069218f900118.setContent(html_ffab30d33b3a06db9847becba02287e4);
         
 
-        circle_marker_540b0fd28b42d072961b8909de6d7d55.bindPopup(popup_e095f8724179f4624e9e85b0d9f6c410)
+        marker_6d1b9ff5e7dc6a36871433f9dae1250c.bindPopup(popup_bdde8c8edf8cdfd3cef069218f900118)
         ;
 
         
     
     
-            circle_marker_540b0fd28b42d072961b8909de6d7d55.bindTooltip(
+            marker_6d1b9ff5e7dc6a36871433f9dae1250c.bindTooltip(
                 `<div>
-                     Netherlands (EU(欧盟))
+                     Netherlands
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_5ee18202c9a55393730a3d3631661b17 = L.circleMarker(
+            var marker_4233b5895dabd1449377606d05ba308c = L.marker(
                 [52.2297, 21.0122],
-                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_4f0b6cef1582866b74c48944425c1d14 = L.popup({"maxWidth": "100%"});
+            var beautify_icon_97638cd82244b0a0679941e49539c8fd = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_4233b5895dabd1449377606d05ba308c.setIcon(beautify_icon_97638cd82244b0a0679941e49539c8fd);
+        
+    
+        var popup_d9ec73a382a77743af9084404188e402 = L.popup({"maxWidth": 200});
 
         
-            var html_34b58fcb3b00f6705f78aab1e1c97070 = $(`<div id="html_34b58fcb3b00f6705f78aab1e1c97070" style="width: 100.0%; height: 100.0%;">Poland</div>`)[0];
-            popup_4f0b6cef1582866b74c48944425c1d14.setContent(html_34b58fcb3b00f6705f78aab1e1c97070);
+            var html_3af03507981bfe98957cbb39732a08f8 = $(`<div id="html_3af03507981bfe98957cbb39732a08f8" style="width: 100.0%; height: 100.0%;"><b>Poland</b><br>EU(欧盟)</div>`)[0];
+            popup_d9ec73a382a77743af9084404188e402.setContent(html_3af03507981bfe98957cbb39732a08f8);
         
 
-        circle_marker_5ee18202c9a55393730a3d3631661b17.bindPopup(popup_4f0b6cef1582866b74c48944425c1d14)
+        marker_4233b5895dabd1449377606d05ba308c.bindPopup(popup_d9ec73a382a77743af9084404188e402)
         ;
 
         
     
     
-            circle_marker_5ee18202c9a55393730a3d3631661b17.bindTooltip(
+            marker_4233b5895dabd1449377606d05ba308c.bindTooltip(
                 `<div>
-                     Poland (EU(欧盟))
+                     Poland
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_61e2b58532a6c74d099cc50afb3c5422 = L.circleMarker(
+            var marker_cfb2beef57cf0b219be42c1a2e0feddd = L.marker(
                 [38.7169, -9.1399],
-                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_a75d35c321edd248a6fda1cb414cc014 = L.popup({"maxWidth": "100%"});
+            var beautify_icon_43e6726baf91026f74855346701ce2b4 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_cfb2beef57cf0b219be42c1a2e0feddd.setIcon(beautify_icon_43e6726baf91026f74855346701ce2b4);
+        
+    
+        var popup_3501d65856ae992b1370347f674584a6 = L.popup({"maxWidth": 200});
 
         
-            var html_3d0af620ea7a483511201a8209dbbb43 = $(`<div id="html_3d0af620ea7a483511201a8209dbbb43" style="width: 100.0%; height: 100.0%;">Portugal</div>`)[0];
-            popup_a75d35c321edd248a6fda1cb414cc014.setContent(html_3d0af620ea7a483511201a8209dbbb43);
+            var html_f5d8b91bcb6173ddb94264cfbdfcdd03 = $(`<div id="html_f5d8b91bcb6173ddb94264cfbdfcdd03" style="width: 100.0%; height: 100.0%;"><b>Portugal</b><br>EU(欧盟)</div>`)[0];
+            popup_3501d65856ae992b1370347f674584a6.setContent(html_f5d8b91bcb6173ddb94264cfbdfcdd03);
         
 
-        circle_marker_61e2b58532a6c74d099cc50afb3c5422.bindPopup(popup_a75d35c321edd248a6fda1cb414cc014)
+        marker_cfb2beef57cf0b219be42c1a2e0feddd.bindPopup(popup_3501d65856ae992b1370347f674584a6)
         ;
 
         
     
     
-            circle_marker_61e2b58532a6c74d099cc50afb3c5422.bindTooltip(
+            marker_cfb2beef57cf0b219be42c1a2e0feddd.bindTooltip(
                 `<div>
-                     Portugal (EU(欧盟))
+                     Portugal
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_9f3774cf3168b9b91e0f49767bc4775f = L.circleMarker(
+            var marker_fdbc3ffa275dde6766ebf05e2559ca9d = L.marker(
                 [44.4268, 26.1025],
-                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_73a571d72befebb4ec1d9e2188586eac = L.popup({"maxWidth": "100%"});
+            var beautify_icon_382ae1278643f322c1807be7506c68be = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_fdbc3ffa275dde6766ebf05e2559ca9d.setIcon(beautify_icon_382ae1278643f322c1807be7506c68be);
+        
+    
+        var popup_02becdaaec89ef2eaed3ba47f9448d01 = L.popup({"maxWidth": 200});
 
         
-            var html_d222732f0ec38e4779206eedf6152c62 = $(`<div id="html_d222732f0ec38e4779206eedf6152c62" style="width: 100.0%; height: 100.0%;">Romania</div>`)[0];
-            popup_73a571d72befebb4ec1d9e2188586eac.setContent(html_d222732f0ec38e4779206eedf6152c62);
+            var html_dbd8396350ffd717d277f07a8c3183ff = $(`<div id="html_dbd8396350ffd717d277f07a8c3183ff" style="width: 100.0%; height: 100.0%;"><b>Romania</b><br>EU(欧盟)</div>`)[0];
+            popup_02becdaaec89ef2eaed3ba47f9448d01.setContent(html_dbd8396350ffd717d277f07a8c3183ff);
         
 
-        circle_marker_9f3774cf3168b9b91e0f49767bc4775f.bindPopup(popup_73a571d72befebb4ec1d9e2188586eac)
+        marker_fdbc3ffa275dde6766ebf05e2559ca9d.bindPopup(popup_02becdaaec89ef2eaed3ba47f9448d01)
         ;
 
         
     
     
-            circle_marker_9f3774cf3168b9b91e0f49767bc4775f.bindTooltip(
+            marker_fdbc3ffa275dde6766ebf05e2559ca9d.bindTooltip(
                 `<div>
-                     Romania (EU(欧盟))
+                     Romania
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_1c4b2cae5fd6fcdef4414701a4db6c9a = L.circleMarker(
+            var marker_f292663f64464154a1a53f5c1db4218e = L.marker(
                 [48.1486, 17.1077],
-                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_59e4670e6673917a0fe5dcda29372401 = L.popup({"maxWidth": "100%"});
+            var beautify_icon_781b4267e777ff798d6b1c234aa8e8d9 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_f292663f64464154a1a53f5c1db4218e.setIcon(beautify_icon_781b4267e777ff798d6b1c234aa8e8d9);
+        
+    
+        var popup_2ae671fffd0c99447f2ce0390167e969 = L.popup({"maxWidth": 200});
 
         
-            var html_326cac1be5d7b7c2dda2048f565dfe4a = $(`<div id="html_326cac1be5d7b7c2dda2048f565dfe4a" style="width: 100.0%; height: 100.0%;">Slovakia</div>`)[0];
-            popup_59e4670e6673917a0fe5dcda29372401.setContent(html_326cac1be5d7b7c2dda2048f565dfe4a);
+            var html_1497967ba7e932a01c48e45780cbd6ac = $(`<div id="html_1497967ba7e932a01c48e45780cbd6ac" style="width: 100.0%; height: 100.0%;"><b>Slovakia</b><br>EU(欧盟)</div>`)[0];
+            popup_2ae671fffd0c99447f2ce0390167e969.setContent(html_1497967ba7e932a01c48e45780cbd6ac);
         
 
-        circle_marker_1c4b2cae5fd6fcdef4414701a4db6c9a.bindPopup(popup_59e4670e6673917a0fe5dcda29372401)
+        marker_f292663f64464154a1a53f5c1db4218e.bindPopup(popup_2ae671fffd0c99447f2ce0390167e969)
         ;
 
         
     
     
-            circle_marker_1c4b2cae5fd6fcdef4414701a4db6c9a.bindTooltip(
+            marker_f292663f64464154a1a53f5c1db4218e.bindTooltip(
                 `<div>
-                     Slovakia (EU(欧盟))
+                     Slovakia
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_7daa096bb09a8e07d7638dcf0047cbb3 = L.circleMarker(
+            var marker_89af0d10ece4eda6a44d410cc1f053cd = L.marker(
                 [46.0569, 14.5058],
-                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_e7ada9950dbdb54be68f27d723df5d6f = L.popup({"maxWidth": "100%"});
+            var beautify_icon_f3e7a252c32a8d252297f4bd801257c6 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_89af0d10ece4eda6a44d410cc1f053cd.setIcon(beautify_icon_f3e7a252c32a8d252297f4bd801257c6);
+        
+    
+        var popup_18a8b917b3425103ee421091da3dc7ef = L.popup({"maxWidth": 200});
 
         
-            var html_e4e4b9dc82917c300a31bdf3b772ff8d = $(`<div id="html_e4e4b9dc82917c300a31bdf3b772ff8d" style="width: 100.0%; height: 100.0%;">Slovenia</div>`)[0];
-            popup_e7ada9950dbdb54be68f27d723df5d6f.setContent(html_e4e4b9dc82917c300a31bdf3b772ff8d);
+            var html_7e194187e47b2d4d18f63a5557099c59 = $(`<div id="html_7e194187e47b2d4d18f63a5557099c59" style="width: 100.0%; height: 100.0%;"><b>Slovenia</b><br>EU(欧盟)</div>`)[0];
+            popup_18a8b917b3425103ee421091da3dc7ef.setContent(html_7e194187e47b2d4d18f63a5557099c59);
         
 
-        circle_marker_7daa096bb09a8e07d7638dcf0047cbb3.bindPopup(popup_e7ada9950dbdb54be68f27d723df5d6f)
+        marker_89af0d10ece4eda6a44d410cc1f053cd.bindPopup(popup_18a8b917b3425103ee421091da3dc7ef)
         ;
 
         
     
     
-            circle_marker_7daa096bb09a8e07d7638dcf0047cbb3.bindTooltip(
+            marker_89af0d10ece4eda6a44d410cc1f053cd.bindTooltip(
                 `<div>
-                     Slovenia (EU(欧盟))
+                     Slovenia
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_0c7bc09aac3e534e79eddf960e157226 = L.circleMarker(
+            var marker_60527997d37cfad1db5b3c0209995df5 = L.marker(
                 [40.4168, -3.7038],
-                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_09e7360063158ecaec31c8642bf32760 = L.popup({"maxWidth": "100%"});
+            var beautify_icon_a11d1875be9a2352aa2823560efaeaf6 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_60527997d37cfad1db5b3c0209995df5.setIcon(beautify_icon_a11d1875be9a2352aa2823560efaeaf6);
+        
+    
+        var popup_0c1b1690943cd8a370df73af2f11c53d = L.popup({"maxWidth": 200});
 
         
-            var html_0414ac156d300aef1db42da258434244 = $(`<div id="html_0414ac156d300aef1db42da258434244" style="width: 100.0%; height: 100.0%;">Spain</div>`)[0];
-            popup_09e7360063158ecaec31c8642bf32760.setContent(html_0414ac156d300aef1db42da258434244);
+            var html_233e6a3b117de540e5898b6f88818c4e = $(`<div id="html_233e6a3b117de540e5898b6f88818c4e" style="width: 100.0%; height: 100.0%;"><b>Spain</b><br>EU(欧盟)</div>`)[0];
+            popup_0c1b1690943cd8a370df73af2f11c53d.setContent(html_233e6a3b117de540e5898b6f88818c4e);
         
 
-        circle_marker_0c7bc09aac3e534e79eddf960e157226.bindPopup(popup_09e7360063158ecaec31c8642bf32760)
+        marker_60527997d37cfad1db5b3c0209995df5.bindPopup(popup_0c1b1690943cd8a370df73af2f11c53d)
         ;
 
         
     
     
-            circle_marker_0c7bc09aac3e534e79eddf960e157226.bindTooltip(
+            marker_60527997d37cfad1db5b3c0209995df5.bindTooltip(
                 `<div>
-                     Spain (EU(欧盟))
+                     Spain
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_442c5ca174fd1faba5fe052759852beb = L.circleMarker(
+            var marker_550efb35746cd9f7cbadf0210451d32c = L.marker(
                 [59.3293, 18.0686],
-                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_b00379571d87bfd8672571a8468ae50a = L.popup({"maxWidth": "100%"});
+            var beautify_icon_8ca7c62d53a0b53e18776884900059a0 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_550efb35746cd9f7cbadf0210451d32c.setIcon(beautify_icon_8ca7c62d53a0b53e18776884900059a0);
+        
+    
+        var popup_cf6836ff44593aec5d328922c36962c8 = L.popup({"maxWidth": 200});
 
         
-            var html_37fc25acd3678ed21ed0c63e3c3bcda0 = $(`<div id="html_37fc25acd3678ed21ed0c63e3c3bcda0" style="width: 100.0%; height: 100.0%;">Sweden</div>`)[0];
-            popup_b00379571d87bfd8672571a8468ae50a.setContent(html_37fc25acd3678ed21ed0c63e3c3bcda0);
+            var html_b3531fa554d8a29bd523e73c170370dc = $(`<div id="html_b3531fa554d8a29bd523e73c170370dc" style="width: 100.0%; height: 100.0%;"><b>Sweden</b><br>EU(欧盟)</div>`)[0];
+            popup_cf6836ff44593aec5d328922c36962c8.setContent(html_b3531fa554d8a29bd523e73c170370dc);
         
 
-        circle_marker_442c5ca174fd1faba5fe052759852beb.bindPopup(popup_b00379571d87bfd8672571a8468ae50a)
+        marker_550efb35746cd9f7cbadf0210451d32c.bindPopup(popup_cf6836ff44593aec5d328922c36962c8)
         ;
 
         
     
     
-            circle_marker_442c5ca174fd1faba5fe052759852beb.bindTooltip(
+            marker_550efb35746cd9f7cbadf0210451d32c.bindTooltip(
                 `<div>
-                     Sweden (EU(欧盟))
+                     Sweden
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_a73711a0e4c109b0e4e6bcff53754caa = L.circleMarker(
+            var marker_9727a6400aa06e24ba98d9662510f092 = L.marker(
                 [48.2082, 16.3738],
-                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_20bcfd8c35565f16fe275029c7de7931 = L.popup({"maxWidth": "100%"});
+            var beautify_icon_e1f2b92e113a082660b5d0789a885ebf = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_9727a6400aa06e24ba98d9662510f092.setIcon(beautify_icon_e1f2b92e113a082660b5d0789a885ebf);
+        
+    
+        var popup_ca41504eff60388e943d5b4a15a0ce12 = L.popup({"maxWidth": 200});
 
         
-            var html_fe3d595034b50b1711b95278586d118e = $(`<div id="html_fe3d595034b50b1711b95278586d118e" style="width: 100.0%; height: 100.0%;">Austria</div>`)[0];
-            popup_20bcfd8c35565f16fe275029c7de7931.setContent(html_fe3d595034b50b1711b95278586d118e);
+            var html_03ddb30e29e091d35336ab0066a85efe = $(`<div id="html_03ddb30e29e091d35336ab0066a85efe" style="width: 100.0%; height: 100.0%;"><b>Austria</b><br>EU(欧盟)</div>`)[0];
+            popup_ca41504eff60388e943d5b4a15a0ce12.setContent(html_03ddb30e29e091d35336ab0066a85efe);
         
 
-        circle_marker_a73711a0e4c109b0e4e6bcff53754caa.bindPopup(popup_20bcfd8c35565f16fe275029c7de7931)
+        marker_9727a6400aa06e24ba98d9662510f092.bindPopup(popup_ca41504eff60388e943d5b4a15a0ce12)
         ;
 
         
     
     
-            circle_marker_a73711a0e4c109b0e4e6bcff53754caa.bindTooltip(
+            marker_9727a6400aa06e24ba98d9662510f092.bindTooltip(
                 `<div>
-                     Austria (EU(欧盟))
+                     Austria
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var circle_marker_4f279d586339af590fd9be6a7cd45290 = L.circleMarker(
+            var marker_41de4b66589f97cc61d302e4e018921a = L.marker(
                 [49.6117, 6.1319],
-                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_5df476241a95920b9eaeec873d57996d);
+                {}
+            ).addTo(map_a621e8ac87d79b8ccb863b03320c0693);
         
     
-        var popup_dcab41334c1d5afe0361642afb2cdd00 = L.popup({"maxWidth": "100%"});
+            var beautify_icon_7aef017cf765edb8a663656bb0546929 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_41de4b66589f97cc61d302e4e018921a.setIcon(beautify_icon_7aef017cf765edb8a663656bb0546929);
+        
+    
+        var popup_51da61a8f44d885a80307dcc3e421f54 = L.popup({"maxWidth": 200});
 
         
-            var html_88adfbf6d1e9ef396bd34fd870b84500 = $(`<div id="html_88adfbf6d1e9ef396bd34fd870b84500" style="width: 100.0%; height: 100.0%;">Luxembourg</div>`)[0];
-            popup_dcab41334c1d5afe0361642afb2cdd00.setContent(html_88adfbf6d1e9ef396bd34fd870b84500);
+            var html_0d55119f40d1a977d3e5722337f9b306 = $(`<div id="html_0d55119f40d1a977d3e5722337f9b306" style="width: 100.0%; height: 100.0%;"><b>Luxembourg</b><br>EU(欧盟)</div>`)[0];
+            popup_51da61a8f44d885a80307dcc3e421f54.setContent(html_0d55119f40d1a977d3e5722337f9b306);
         
 
-        circle_marker_4f279d586339af590fd9be6a7cd45290.bindPopup(popup_dcab41334c1d5afe0361642afb2cdd00)
+        marker_41de4b66589f97cc61d302e4e018921a.bindPopup(popup_51da61a8f44d885a80307dcc3e421f54)
         ;
 
         
     
     
-            circle_marker_4f279d586339af590fd9be6a7cd45290.bindTooltip(
+            marker_41de4b66589f97cc61d302e4e018921a.bindTooltip(
                 `<div>
-                     Luxembourg (EU(欧盟))
+                     Luxembourg
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var measure_control_2a751d5de5e931fdd8d2865c73232ff2 = new L.Control.Measure(
+            var measure_control_f5938e917b7c704b32d7e92ea8d8d321 = new L.Control.Measure(
                 {"position": "topright", "primaryAreaUnit": "sqmeters", "primaryLengthUnit": "kilometers", "secondaryAreaUnit": "acres", "secondaryLengthUnit": "miles"});
-            map_5df476241a95920b9eaeec873d57996d.addControl(measure_control_2a751d5de5e931fdd8d2865c73232ff2);
+            map_a621e8ac87d79b8ccb863b03320c0693.addControl(measure_control_f5938e917b7c704b32d7e92ea8d8d321);
 
         
 </script>
