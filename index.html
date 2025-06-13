@@ -1,364 +1,1511 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8" />
-  <title>Tylko wybrane kraje UE/non-UE</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <style> html, body, #map { height: 100%; margin: 0; } </style>
-
-  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
-  <style>
-    .country-label {
-      font-weight: bold;
-      font-size: 14px;
-      color: black;
-      text-shadow: 0 0 3px white;
-    }
-    .legend {
-      position: absolute;
-      bottom: 30px;
-      left: 30px;
-      background: rgba(255,255,255,0.95);
-      padding: 12px 18px;
-      border-radius: 8px;
-      font-size: 14px;
-      box-shadow: 0 0 10px #aaa;
-      z-index: 999;
-    }
-    .legend span {
-      display: inline-block;
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      margin-right: 8px;
-    }
-    #resetBtn {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      z-index: 9999;
-      background-color: #f44336;
-      color: white;
-      border: none;
-      padding: 10px 16px;
-      font-size: 14px;
-      border-radius: 6px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-      cursor: pointer;
-    }
-  </style>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+            </style>
+        
+    <script src="https://cdn.jsdelivr.net/gh/marslan390/BeautifyMarker/leaflet-beautify-marker-icon.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/marslan390/BeautifyMarker/leaflet-beautify-marker-icon.min.css"/>
+    <script src="https://cdn.jsdelivr.net/gh/ljagis/leaflet-measure@2.1.7/dist/leaflet-measure.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ljagis/leaflet-measure@2.1.7/dist/leaflet-measure.min.css"/>
 </head>
 <body>
-<div id="map"></div>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
-<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-<script>
-  let distanceMarkers = [];
-  let distanceLine = null;
-  let distanceLabel = null;
-
-  function haversine(lat1, lon1, lat2, lon2) {
-    function toRad(x) { return x * Math.PI / 180; }
-    const R = 6371e3;
-    const φ1 = toRad(lat1), φ2 = toRad(lat2);
-    const Δφ = toRad(lat2 - lat1);
-    const Δλ = toRad(lon2 - lon1);
-    const a = Math.sin(Δφ/2)**2 + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ/2)**2;
-    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  }
-
-  function formatDistance(d) {
-    return (d / 1000).toFixed(2) + " km";
-  }
-
-  function resetMeasurement() {
-    distanceMarkers.forEach(m => map.removeLayer(m));
-    if (distanceLine) map.removeLayer(distanceLine);
-    if (distanceLabel) map.removeLayer(distanceLabel);
-    distanceMarkers = [];
-    distanceLine = null;
-    distanceLabel = null;
-  }
-
-  function animatePulse(latlng) {
-    const pulse = L.circle(latlng, {
-      radius: 50000,
-      color: 'red',
-      fillColor: 'red',
-      fillOpacity: 0.3
-    }).addTo(map);
-    let r = 50000;
-    let interval = setInterval(() => {
-      r += 10000;
-      pulse.setRadius(r);
-      pulse.setStyle({opacity: 0.3 - (r - 50000)/200000});
-      if (r > 200000) {
-        map.removeLayer(pulse);
-        clearInterval(interval);
-      }
-    }, 40);
-  }
-
-  // Marker + klik do pomiaru
-  Object.entries(countryShapes).forEach(([name, code]) => {
-    if (!countries[name]) return;
-    fetch('https://raw.githubusercontent.com/datasets/geo-countries/master/data/' + code + '.geojson')
-      .then(resp => resp.json())
-      .then(data => {
-        const layer = L.geoJSON(data, {
-          style: function () {
-            return {
-              color: "#333",
-              weight: 1,
-              fillColor: regionColors[countries[name]],
-              fillOpacity: 0.7
-            };
-          }
-        }).addTo(map);
-        layer.eachLayer(function (featureLayer) {
-          const center = featureLayer.getBounds().getCenter();
-          const tooltip = L.tooltip(center, {
-            permanent: true,
-            direction: 'center',
-            className: 'country-label'
-          }).setContent(name);
-          map.addLayer(tooltip);
-          featureLayer.on("click", function () {
-            if (distanceMarkers.length >= 2) resetMeasurement();
-            const pulseMarker = L.circleMarker(center, {
-              radius: 6, color: 'red', fillColor: 'red', fillOpacity: 1
-            }).addTo(map);
-            animatePulse(center);
-            distanceMarkers.push(pulseMarker);
-            if (distanceMarkers.length === 2) {
-              const p1 = distanceMarkers[0].getLatLng();
-              const p2 = distanceMarkers[1].getLatLng();
-              const dist = haversine(p1.lat, p1.lng, p2.lat, p2.lng);
-              distanceLine = L.polyline([p1, p2], {color: 'red', weight: 3, dashArray: '5, 10'}).addTo(map);
-              distanceLabel = L.marker([(p1.lat + p2.lat)/2, (p1.lng + p2.lng)/2], {
-                icon: L.divIcon({
-                  html: '<div style="background:white;padding:6px 10px;border-radius:6px;font-weight:bold;box-shadow:0 0 6px rgba(0,0,0,0.2);">' + formatDistance(dist) + '</div>'
-                })
-              }).addTo(map);
-            }
-          });
-        });
-      });
-  });
-
-  // Wyszukiwarka
-  L.Control.geocoder({defaultMarkGeocode: false})
-    .on('markgeocode', function(e) {
-      map.setView(e.geocode.center, 5);
-    }).addTo(map);
-</script>
-</script>
-<script>
-var map = L.map('map', {
-  center: [52, 15],
-  zoom: 4,
-  minZoom: 3,
-  maxZoom: 7,
-  maxBounds: [[30, -20], [70, 50]]
-});
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-  attribution: 'Map data © OpenStreetMap contributors'
-}).addTo(map);
-
-var countries = {
-  "Albania": "EU(非欧盟)",
-  "Belarus": "EU(非欧盟)",
-  "Bosnia and Herzegovina": "EU(非欧盟)",
-  "Georgia": "EU(非欧盟)",
-  "Iceland": "EU(非欧盟)",
-  "Israel": "EU(非欧盟)",
-  "Macedonia": "EU(非欧盟)",
-  "Norway": "EU(非欧盟)",
-  "Russia": "EU(非欧盟)",
-  "Serbia": "EU(非欧盟)",
-  "Montenegro": "EU(非欧盟)",
-  "Switzerland": "EU(非欧盟)",
-  "Turkey": "EU(非欧盟)",
-  "Ukraine": "EU(非欧盟)",
-  "United Arab Emirates": "EU(非欧盟)",
-  "United Kingdom": "EU(非欧盟)",
-  "Yugoslavia": "EU(非欧盟)",
-  "Azerbaijan": "EU(非欧盟)",
-  "Kosovo": "EU(非欧盟)",
-  "Moldova": "EU(非欧盟)",
-  "Cyprus": "EU(欧盟)",
-  "Belgium": "EU(欧盟)",
-  "Bulgaria": "EU(欧盟)",
-  "Croatia": "EU(欧盟)",
-  "Czech": "EU(欧盟)",
-  "Denmark": "EU(欧盟)",
-  "Estonia": "EU(欧盟)",
-  "Finland": "EU(欧盟)",
-  "France": "EU(欧盟)",
-  "Germany": "EU(欧盟)",
-  "Greece": "EU(欧盟)",
-  "Hungary": "EU(欧盟)",
-  "Ireland": "EU(欧盟)",
-  "Italy": "EU(欧盟)",
-  "Latvia": "EU(欧盟)",
-  "Lithuania": "EU(欧盟)",
-  "Malta": "EU(欧盟)",
-  "Netherlands": "EU(欧盟)",
-  "Poland": "EU(欧盟)",
-  "Portugal": "EU(欧盟)",
-  "Romania": "EU(欧盟)",
-  "Slovakia": "EU(欧盟)",
-  "Slovenia": "EU(欧盟)",
-  "Spain": "EU(欧盟)",
-  "Sweden": "EU(欧盟)",
-  "Austria": "EU(欧盟)",
-  "Luxembourg": "EU(欧盟)",
-};
-
-const regionColors = {
-  "EU(欧盟)": "#2ecc71",
-  "EU(非欧盟)": "#3498db"
-};
-
-const countryShapes = {
-  "Austria":"AT","Belgium":"BE","Bulgaria":"BG","Croatia":"HR","Cyprus":"CY","Czech":"CZ","Denmark":"DK",
-  "Estonia":"EE","Finland":"FI","France":"FR","Germany":"DE","Greece":"GR","Hungary":"HU","Ireland":"IE",
-  "Italy":"IT","Latvia":"LV","Lithuania":"LT","Luxembourg":"LU","Malta":"MT","Netherlands":"NL","Poland":"PL",
-  "Portugal":"PT","Romania":"RO","Slovakia":"SK","Slovenia":"SI","Spain":"ES","Sweden":"SE",
-  "Albania":"AL","Belarus":"BY","Bosnia and Herzegovina":"BA","Georgia":"GE","Iceland":"IS","Israel":"IL",
-  "Macedonia":"MK","Norway":"NO","Russia":"RU","Serbia":"RS","Montenegro":"ME","Switzerland":"CH",
-  "Turkey":"TR","Ukraine":"UA","United Arab Emirates":"AE","United Kingdom":"GB","Yugoslavia":"RS",
-  "Azerbaijan":"AZ","Kosovo":"XK","Moldova":"MD"
-};
-
-Object.entries(countryShapes).forEach(([name, code]) => {
-  if (!countries[name]) return;
-  fetch('https://raw.githubusercontent.com/datasets/geo-countries/master/data/' + code + '.geojson')
-    .then(resp => resp.json())
-    .then(data => {
-      L.geoJSON(data, {
-        style: function () {
-          return {
-            color: "#333",
-            weight: 1,
-            fillColor: regionColors[countries[name]],
-            fillOpacity: 0.7
-          };
-        }
-      }).addTo(map).bindTooltip(name, {{permanent: true, direction: "center", className: "country-label"}});
-    });
-});
-
-<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-<script>
-  let distanceMarkers = [];
-  let distanceLine = null;
-  let distanceLabel = null;
-
-  function haversine(lat1, lon1, lat2, lon2) {
-    function toRad(x) { return x * Math.PI / 180; }
-    const R = 6371e3;
-    const φ1 = toRad(lat1), φ2 = toRad(lat2);
-    const Δφ = toRad(lat2 - lat1);
-    const Δλ = toRad(lon2 - lon1);
-    const a = Math.sin(Δφ/2)**2 + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ/2)**2;
-    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  }
-
-  function formatDistance(d) {
-    return (d / 1000).toFixed(2) + " km";
-  }
-
-  function resetMeasurement() {
-    distanceMarkers.forEach(m => map.removeLayer(m));
-    if (distanceLine) map.removeLayer(distanceLine);
-    if (distanceLabel) map.removeLayer(distanceLabel);
-    distanceMarkers = [];
-    distanceLine = null;
-    distanceLabel = null;
-  }
-
-  function animatePulse(latlng) {
-    const pulse = L.circle(latlng, {
-      radius: 50000,
-      color: 'red',
-      fillColor: 'red',
-      fillOpacity: 0.3
-    }).addTo(map);
-    let r = 50000;
-    let interval = setInterval(() => {
-      r += 10000;
-      pulse.setRadius(r);
-      pulse.setStyle({opacity: 0.3 - (r - 50000)/200000});
-      if (r > 200000) {
-        map.removeLayer(pulse);
-        clearInterval(interval);
-      }
-    }, 40);
-  }
-
-  // Marker + klik do pomiaru
-  Object.entries(countryShapes).forEach(([name, code]) => {
-    if (!countries[name]) return;
-    fetch('https://raw.githubusercontent.com/datasets/geo-countries/master/data/' + code + '.geojson')
-      .then(resp => resp.json())
-      .then(data => {
-        const layer = L.geoJSON(data, {
-          style: function () {
-            return {
-              color: "#333",
-              weight: 1,
-              fillColor: regionColors[countries[name]],
-              fillOpacity: 0.7
-            };
-          }
-        }).addTo(map);
-        layer.eachLayer(function (featureLayer) {
-          const center = featureLayer.getBounds().getCenter();
-          const tooltip = L.tooltip(center, {
-            permanent: true,
-            direction: 'center',
-            className: 'country-label'
-          }).setContent(name);
-          map.addLayer(tooltip);
-          featureLayer.on("click", function () {
-            if (distanceMarkers.length >= 2) resetMeasurement();
-            const pulseMarker = L.circleMarker(center, {
-              radius: 6, color: 'red', fillColor: 'red', fillOpacity: 1
-            }).addTo(map);
-            animatePulse(center);
-            distanceMarkers.push(pulseMarker);
-            if (distanceMarkers.length === 2) {
-              const p1 = distanceMarkers[0].getLatLng();
-              const p2 = distanceMarkers[1].getLatLng();
-              const dist = haversine(p1.lat, p1.lng, p2.lat, p2.lng);
-              distanceLine = L.polyline([p1, p2], {color: 'red', weight: 3, dashArray: '5, 10'}).addTo(map);
-              distanceLabel = L.marker([(p1.lat + p2.lat)/2, (p1.lng + p2.lng)/2], {
-                icon: L.divIcon({
-                  html: '<div style="background:white;padding:6px 10px;border-radius:6px;font-weight:bold;box-shadow:0 0 6px rgba(0,0,0,0.2);">' + formatDistance(dist) + '</div>'
-                })
-              }).addTo(map);
-            }
-          });
-        });
-      });
-  });
-
-  // Wyszukiwarka
-  L.Control.geocoder({defaultMarkGeocode: false})
-    .on('markgeocode', function(e) {
-      map.setView(e.geocode.center, 5);
-    }).addTo(map);
-</script>
-</script>
-
-  <div class="legend">
-    <b>Legenda</b><br/>
-    <span style="background:#2ecc71;"></span> EU (członek)<br/>
-    <span style="background:#3498db;"></span> spoza UE
-  </div>
-  <button id="resetBtn" onclick="resetMeasurement()">💾 Reset pomiaru</button>
+    
+    
+<div style="
+    position: fixed; 
+    bottom: 50px; left: 50px; width: 250px; height: 130px; 
+    background-color: white; border:2px solid grey; z-index:9999; 
+    font-size:16px; padding: 10px; box-shadow: 2px 2px 6px rgba(0,0,0,0.3);">
+    <b>Legenda:</b><br>
+    <span style="color:green; font-weight:bold;">●</span> EU (członek) <i>(EU(欧盟))</i><br>
+    <span style="color:blue; font-weight:bold;">●</span> spoza UE <i>(EU(非欧盟))</i><br><br>
+    🔘 Kliknij punkt, by zobaczyć kraj<br>
+    📏 Użyj narzędzia pomiaru
+</div>
+    None
+    
+            <div class="folium-map" id="map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec" ></div>
+        
 </body>
+<script>
+    
+    
+            var map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec = L.map(
+                "map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec",
+                {
+                    center: [52.0, 15.0],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 4,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+            L.control.scale().addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+
+            
+
+        
+    
+            var tile_layer_30b262685cbfed34c0658cc9574f73af = L.tileLayer(
+                "https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png",
+                {"attribution": "\u0026copy; \u003ca href=\"http://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors \u0026copy; \u003ca href=\"http://cartodb.com/attributions\"\u003eCartoDB\u003c/a\u003e, CartoDB \u003ca href =\"http://cartodb.com/attributions\"\u003eattributions\u003c/a\u003e", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var marker_fcef59abcf0b60a331a88956b29ebac4 = L.marker(
+                [41.3275, 19.8189],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_823b90cde8d39787cae1ddffdaaa2c9c = new L.BeautifyIcon.icon(
+                {"backgroundColor": "blue", "borderColor": "blue", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u25ce", "textColor": "white"}
+            )
+            marker_fcef59abcf0b60a331a88956b29ebac4.setIcon(beautify_icon_823b90cde8d39787cae1ddffdaaa2c9c);
+        
+    
+        var popup_2ad9baff600288c42bcd76c23558ed48 = L.popup({"maxWidth": 200});
+
+        
+            var html_90bf518fe0b426759b560af7c52a905d = $(`<div id="html_90bf518fe0b426759b560af7c52a905d" style="width: 100.0%; height: 100.0%;"><b>Albania</b><br>EU(非欧盟)</div>`)[0];
+            popup_2ad9baff600288c42bcd76c23558ed48.setContent(html_90bf518fe0b426759b560af7c52a905d);
+        
+
+        marker_fcef59abcf0b60a331a88956b29ebac4.bindPopup(popup_2ad9baff600288c42bcd76c23558ed48)
+        ;
+
+        
+    
+    
+            marker_fcef59abcf0b60a331a88956b29ebac4.bindTooltip(
+                `<div>
+                     Albania
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_7efb97c5a7360890c994de81e6114f74 = L.marker(
+                [53.9006, 27.559],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_9e302d8648e71ef5141e4086f151aea3 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "blue", "borderColor": "blue", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u25ce", "textColor": "white"}
+            )
+            marker_7efb97c5a7360890c994de81e6114f74.setIcon(beautify_icon_9e302d8648e71ef5141e4086f151aea3);
+        
+    
+        var popup_5c10863e298e3f47b5d912f32c0e9aab = L.popup({"maxWidth": 200});
+
+        
+            var html_be5b5ab1c360fd7483e0240970841607 = $(`<div id="html_be5b5ab1c360fd7483e0240970841607" style="width: 100.0%; height: 100.0%;"><b>Belarus</b><br>EU(非欧盟)</div>`)[0];
+            popup_5c10863e298e3f47b5d912f32c0e9aab.setContent(html_be5b5ab1c360fd7483e0240970841607);
+        
+
+        marker_7efb97c5a7360890c994de81e6114f74.bindPopup(popup_5c10863e298e3f47b5d912f32c0e9aab)
+        ;
+
+        
+    
+    
+            marker_7efb97c5a7360890c994de81e6114f74.bindTooltip(
+                `<div>
+                     Belarus
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_b93fce5602a02ad96fb1adc1925b1b44 = L.marker(
+                [41.7151, 44.8271],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_527736951d65a17cfbab6cbbc398b005 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "blue", "borderColor": "blue", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u25ce", "textColor": "white"}
+            )
+            marker_b93fce5602a02ad96fb1adc1925b1b44.setIcon(beautify_icon_527736951d65a17cfbab6cbbc398b005);
+        
+    
+        var popup_fb8c617f1b9fbb5d8a3d15c1e081b99e = L.popup({"maxWidth": 200});
+
+        
+            var html_0a03fb3363e000a66e58e71f60f74523 = $(`<div id="html_0a03fb3363e000a66e58e71f60f74523" style="width: 100.0%; height: 100.0%;"><b>Georgia</b><br>EU(非欧盟)</div>`)[0];
+            popup_fb8c617f1b9fbb5d8a3d15c1e081b99e.setContent(html_0a03fb3363e000a66e58e71f60f74523);
+        
+
+        marker_b93fce5602a02ad96fb1adc1925b1b44.bindPopup(popup_fb8c617f1b9fbb5d8a3d15c1e081b99e)
+        ;
+
+        
+    
+    
+            marker_b93fce5602a02ad96fb1adc1925b1b44.bindTooltip(
+                `<div>
+                     Georgia
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_2ef6919c651a39d21db7fbf9da3b7b2d = L.marker(
+                [64.1355, -21.8954],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_2eee4a2d78e2873b2ffecf1940b50778 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "blue", "borderColor": "blue", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u25ce", "textColor": "white"}
+            )
+            marker_2ef6919c651a39d21db7fbf9da3b7b2d.setIcon(beautify_icon_2eee4a2d78e2873b2ffecf1940b50778);
+        
+    
+        var popup_ea6cc5da81117e6af8b173a6d70ae5d4 = L.popup({"maxWidth": 200});
+
+        
+            var html_94dec48b94fe82f3ae567486a8f3039f = $(`<div id="html_94dec48b94fe82f3ae567486a8f3039f" style="width: 100.0%; height: 100.0%;"><b>Iceland</b><br>EU(非欧盟)</div>`)[0];
+            popup_ea6cc5da81117e6af8b173a6d70ae5d4.setContent(html_94dec48b94fe82f3ae567486a8f3039f);
+        
+
+        marker_2ef6919c651a39d21db7fbf9da3b7b2d.bindPopup(popup_ea6cc5da81117e6af8b173a6d70ae5d4)
+        ;
+
+        
+    
+    
+            marker_2ef6919c651a39d21db7fbf9da3b7b2d.bindTooltip(
+                `<div>
+                     Iceland
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_57a41262fe9fe7975c968ba37f079f64 = L.marker(
+                [31.7683, 35.2137],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_58e5c3ccccbeda5986182ca9d89fe4e0 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "blue", "borderColor": "blue", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u25ce", "textColor": "white"}
+            )
+            marker_57a41262fe9fe7975c968ba37f079f64.setIcon(beautify_icon_58e5c3ccccbeda5986182ca9d89fe4e0);
+        
+    
+        var popup_c563c131a216bd4d609655c96766c603 = L.popup({"maxWidth": 200});
+
+        
+            var html_2d8c3259dd8234c998e725e24ee8dcd4 = $(`<div id="html_2d8c3259dd8234c998e725e24ee8dcd4" style="width: 100.0%; height: 100.0%;"><b>Israel</b><br>EU(非欧盟)</div>`)[0];
+            popup_c563c131a216bd4d609655c96766c603.setContent(html_2d8c3259dd8234c998e725e24ee8dcd4);
+        
+
+        marker_57a41262fe9fe7975c968ba37f079f64.bindPopup(popup_c563c131a216bd4d609655c96766c603)
+        ;
+
+        
+    
+    
+            marker_57a41262fe9fe7975c968ba37f079f64.bindTooltip(
+                `<div>
+                     Israel
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_423cca76fd9319d9e4c705db419f8ed0 = L.marker(
+                [59.9139, 10.7522],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_4eeb9e4ce45846e6c80801804c7f7b42 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "blue", "borderColor": "blue", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u25ce", "textColor": "white"}
+            )
+            marker_423cca76fd9319d9e4c705db419f8ed0.setIcon(beautify_icon_4eeb9e4ce45846e6c80801804c7f7b42);
+        
+    
+        var popup_e5c285b63856f492472075c48b7e7139 = L.popup({"maxWidth": 200});
+
+        
+            var html_3aab93a555ada508eab8d140b18ed429 = $(`<div id="html_3aab93a555ada508eab8d140b18ed429" style="width: 100.0%; height: 100.0%;"><b>Norway</b><br>EU(非欧盟)</div>`)[0];
+            popup_e5c285b63856f492472075c48b7e7139.setContent(html_3aab93a555ada508eab8d140b18ed429);
+        
+
+        marker_423cca76fd9319d9e4c705db419f8ed0.bindPopup(popup_e5c285b63856f492472075c48b7e7139)
+        ;
+
+        
+    
+    
+            marker_423cca76fd9319d9e4c705db419f8ed0.bindTooltip(
+                `<div>
+                     Norway
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_cecf4890b73b0a73d8c56186c93cfe0c = L.marker(
+                [55.7558, 37.6173],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_877c4d3d9318a25b538ca269450722b8 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "blue", "borderColor": "blue", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u25ce", "textColor": "white"}
+            )
+            marker_cecf4890b73b0a73d8c56186c93cfe0c.setIcon(beautify_icon_877c4d3d9318a25b538ca269450722b8);
+        
+    
+        var popup_27b0b6081f5bc29dc06440457b724d17 = L.popup({"maxWidth": 200});
+
+        
+            var html_6310b2f088c30de4e62c7060466524e4 = $(`<div id="html_6310b2f088c30de4e62c7060466524e4" style="width: 100.0%; height: 100.0%;"><b>Russia</b><br>EU(非欧盟)</div>`)[0];
+            popup_27b0b6081f5bc29dc06440457b724d17.setContent(html_6310b2f088c30de4e62c7060466524e4);
+        
+
+        marker_cecf4890b73b0a73d8c56186c93cfe0c.bindPopup(popup_27b0b6081f5bc29dc06440457b724d17)
+        ;
+
+        
+    
+    
+            marker_cecf4890b73b0a73d8c56186c93cfe0c.bindTooltip(
+                `<div>
+                     Russia
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_e14924b3ba5345077021e0e60513ccac = L.marker(
+                [44.7866, 20.4489],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_d871693a1cedfeb3603a32337b2acb14 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "blue", "borderColor": "blue", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u25ce", "textColor": "white"}
+            )
+            marker_e14924b3ba5345077021e0e60513ccac.setIcon(beautify_icon_d871693a1cedfeb3603a32337b2acb14);
+        
+    
+        var popup_3725ea098fb4b0415cddc20af8832ffd = L.popup({"maxWidth": 200});
+
+        
+            var html_ea611ae65a32e79507808925563e374b = $(`<div id="html_ea611ae65a32e79507808925563e374b" style="width: 100.0%; height: 100.0%;"><b>Serbia</b><br>EU(非欧盟)</div>`)[0];
+            popup_3725ea098fb4b0415cddc20af8832ffd.setContent(html_ea611ae65a32e79507808925563e374b);
+        
+
+        marker_e14924b3ba5345077021e0e60513ccac.bindPopup(popup_3725ea098fb4b0415cddc20af8832ffd)
+        ;
+
+        
+    
+    
+            marker_e14924b3ba5345077021e0e60513ccac.bindTooltip(
+                `<div>
+                     Serbia
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_c61d97085778a76b590892dc9fe38b35 = L.marker(
+                [42.4304, 19.2594],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_315bba9b6493ceac89cbd522b96fc71b = new L.BeautifyIcon.icon(
+                {"backgroundColor": "blue", "borderColor": "blue", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u25ce", "textColor": "white"}
+            )
+            marker_c61d97085778a76b590892dc9fe38b35.setIcon(beautify_icon_315bba9b6493ceac89cbd522b96fc71b);
+        
+    
+        var popup_913b3a42ccb16a6e5a8ed9ce6addb3fd = L.popup({"maxWidth": 200});
+
+        
+            var html_a8f80dda4829c2332de19adfba32a873 = $(`<div id="html_a8f80dda4829c2332de19adfba32a873" style="width: 100.0%; height: 100.0%;"><b>Montenegro</b><br>EU(非欧盟)</div>`)[0];
+            popup_913b3a42ccb16a6e5a8ed9ce6addb3fd.setContent(html_a8f80dda4829c2332de19adfba32a873);
+        
+
+        marker_c61d97085778a76b590892dc9fe38b35.bindPopup(popup_913b3a42ccb16a6e5a8ed9ce6addb3fd)
+        ;
+
+        
+    
+    
+            marker_c61d97085778a76b590892dc9fe38b35.bindTooltip(
+                `<div>
+                     Montenegro
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_d69b1e63e038e93cd250fe1d2e3adcad = L.marker(
+                [46.9481, 7.4474],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_f87f2b879ca92a5b730be6a11061dbf9 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "blue", "borderColor": "blue", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u25ce", "textColor": "white"}
+            )
+            marker_d69b1e63e038e93cd250fe1d2e3adcad.setIcon(beautify_icon_f87f2b879ca92a5b730be6a11061dbf9);
+        
+    
+        var popup_c96e7d420b0ef09465ac1357defd5955 = L.popup({"maxWidth": 200});
+
+        
+            var html_3bcdbe13dbf6c8e7094fe2ac922198ad = $(`<div id="html_3bcdbe13dbf6c8e7094fe2ac922198ad" style="width: 100.0%; height: 100.0%;"><b>Switzerland</b><br>EU(非欧盟)</div>`)[0];
+            popup_c96e7d420b0ef09465ac1357defd5955.setContent(html_3bcdbe13dbf6c8e7094fe2ac922198ad);
+        
+
+        marker_d69b1e63e038e93cd250fe1d2e3adcad.bindPopup(popup_c96e7d420b0ef09465ac1357defd5955)
+        ;
+
+        
+    
+    
+            marker_d69b1e63e038e93cd250fe1d2e3adcad.bindTooltip(
+                `<div>
+                     Switzerland
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_72d87bbda6f28ce1c68d90c547b2e4d8 = L.marker(
+                [39.9208, 32.8541],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_7bdef0404253393148b0276a9e83ec76 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "blue", "borderColor": "blue", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u25ce", "textColor": "white"}
+            )
+            marker_72d87bbda6f28ce1c68d90c547b2e4d8.setIcon(beautify_icon_7bdef0404253393148b0276a9e83ec76);
+        
+    
+        var popup_cc942b54735b2e05fc9bf87260d49042 = L.popup({"maxWidth": 200});
+
+        
+            var html_3817aa29b7978a9de8429682cdb3f435 = $(`<div id="html_3817aa29b7978a9de8429682cdb3f435" style="width: 100.0%; height: 100.0%;"><b>Turkey</b><br>EU(非欧盟)</div>`)[0];
+            popup_cc942b54735b2e05fc9bf87260d49042.setContent(html_3817aa29b7978a9de8429682cdb3f435);
+        
+
+        marker_72d87bbda6f28ce1c68d90c547b2e4d8.bindPopup(popup_cc942b54735b2e05fc9bf87260d49042)
+        ;
+
+        
+    
+    
+            marker_72d87bbda6f28ce1c68d90c547b2e4d8.bindTooltip(
+                `<div>
+                     Turkey
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_77c021e2940a93a47bca0355d54499aa = L.marker(
+                [50.4501, 30.5234],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_b356946b6c01c32cab3d4b74942b0de0 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "blue", "borderColor": "blue", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u25ce", "textColor": "white"}
+            )
+            marker_77c021e2940a93a47bca0355d54499aa.setIcon(beautify_icon_b356946b6c01c32cab3d4b74942b0de0);
+        
+    
+        var popup_3c1dc5797ebfbf3eaadcc4fb69719574 = L.popup({"maxWidth": 200});
+
+        
+            var html_a80b48ae642095ee5818f5a2354774c4 = $(`<div id="html_a80b48ae642095ee5818f5a2354774c4" style="width: 100.0%; height: 100.0%;"><b>Ukraine</b><br>EU(非欧盟)</div>`)[0];
+            popup_3c1dc5797ebfbf3eaadcc4fb69719574.setContent(html_a80b48ae642095ee5818f5a2354774c4);
+        
+
+        marker_77c021e2940a93a47bca0355d54499aa.bindPopup(popup_3c1dc5797ebfbf3eaadcc4fb69719574)
+        ;
+
+        
+    
+    
+            marker_77c021e2940a93a47bca0355d54499aa.bindTooltip(
+                `<div>
+                     Ukraine
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_db6439aa93dfa2d118f6136221082886 = L.marker(
+                [24.4539, 54.3773],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_135e3e432f13797ab10845fd6af64200 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "blue", "borderColor": "blue", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u25ce", "textColor": "white"}
+            )
+            marker_db6439aa93dfa2d118f6136221082886.setIcon(beautify_icon_135e3e432f13797ab10845fd6af64200);
+        
+    
+        var popup_36ac91e22ad4679555f6591b8d260dd1 = L.popup({"maxWidth": 200});
+
+        
+            var html_8f43674687c22b34dcbadafe30dd0f6e = $(`<div id="html_8f43674687c22b34dcbadafe30dd0f6e" style="width: 100.0%; height: 100.0%;"><b>United Arab Emirates</b><br>EU(非欧盟)</div>`)[0];
+            popup_36ac91e22ad4679555f6591b8d260dd1.setContent(html_8f43674687c22b34dcbadafe30dd0f6e);
+        
+
+        marker_db6439aa93dfa2d118f6136221082886.bindPopup(popup_36ac91e22ad4679555f6591b8d260dd1)
+        ;
+
+        
+    
+    
+            marker_db6439aa93dfa2d118f6136221082886.bindTooltip(
+                `<div>
+                     United Arab Emirates
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_04e5ee2f53affb5737e46f09403d5678 = L.marker(
+                [51.5074, -0.1278],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_e787b77d67d676aa1a29db23dac2e498 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "blue", "borderColor": "blue", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u25ce", "textColor": "white"}
+            )
+            marker_04e5ee2f53affb5737e46f09403d5678.setIcon(beautify_icon_e787b77d67d676aa1a29db23dac2e498);
+        
+    
+        var popup_e451b12c37b8edf482f264c0a061ec3e = L.popup({"maxWidth": 200});
+
+        
+            var html_4b6520cad0757b856aefabaf4f8a018c = $(`<div id="html_4b6520cad0757b856aefabaf4f8a018c" style="width: 100.0%; height: 100.0%;"><b>United Kingdom</b><br>EU(非欧盟)</div>`)[0];
+            popup_e451b12c37b8edf482f264c0a061ec3e.setContent(html_4b6520cad0757b856aefabaf4f8a018c);
+        
+
+        marker_04e5ee2f53affb5737e46f09403d5678.bindPopup(popup_e451b12c37b8edf482f264c0a061ec3e)
+        ;
+
+        
+    
+    
+            marker_04e5ee2f53affb5737e46f09403d5678.bindTooltip(
+                `<div>
+                     United Kingdom
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_005e00d703b31c335d55cc2a6ed8570c = L.marker(
+                [40.4093, 49.8671],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_a357e225390c50def0292cf3e2988f13 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "blue", "borderColor": "blue", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u25ce", "textColor": "white"}
+            )
+            marker_005e00d703b31c335d55cc2a6ed8570c.setIcon(beautify_icon_a357e225390c50def0292cf3e2988f13);
+        
+    
+        var popup_2e7094938e73856db7618f3d5ab53f22 = L.popup({"maxWidth": 200});
+
+        
+            var html_34985e279a425a7784522691f9c75858 = $(`<div id="html_34985e279a425a7784522691f9c75858" style="width: 100.0%; height: 100.0%;"><b>Azerbaijan</b><br>EU(非欧盟)</div>`)[0];
+            popup_2e7094938e73856db7618f3d5ab53f22.setContent(html_34985e279a425a7784522691f9c75858);
+        
+
+        marker_005e00d703b31c335d55cc2a6ed8570c.bindPopup(popup_2e7094938e73856db7618f3d5ab53f22)
+        ;
+
+        
+    
+    
+            marker_005e00d703b31c335d55cc2a6ed8570c.bindTooltip(
+                `<div>
+                     Azerbaijan
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_285899f134fc43f11b2b075c62b20bfd = L.marker(
+                [42.6629, 21.1655],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_2f5bc4a3b52f5366d2bdf9ac8f5ab587 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "blue", "borderColor": "blue", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u25ce", "textColor": "white"}
+            )
+            marker_285899f134fc43f11b2b075c62b20bfd.setIcon(beautify_icon_2f5bc4a3b52f5366d2bdf9ac8f5ab587);
+        
+    
+        var popup_0360fcac7f6b3f8b038664310db854df = L.popup({"maxWidth": 200});
+
+        
+            var html_04c345a2cae2fff63f07ae7c4ad7c87c = $(`<div id="html_04c345a2cae2fff63f07ae7c4ad7c87c" style="width: 100.0%; height: 100.0%;"><b>Kosovo</b><br>EU(非欧盟)</div>`)[0];
+            popup_0360fcac7f6b3f8b038664310db854df.setContent(html_04c345a2cae2fff63f07ae7c4ad7c87c);
+        
+
+        marker_285899f134fc43f11b2b075c62b20bfd.bindPopup(popup_0360fcac7f6b3f8b038664310db854df)
+        ;
+
+        
+    
+    
+            marker_285899f134fc43f11b2b075c62b20bfd.bindTooltip(
+                `<div>
+                     Kosovo
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_e924a78ec17ceb40a5d37e3ae5e0758c = L.marker(
+                [47.0105, 28.8638],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_3b46a3e24e11ba8906a70dd5c4305020 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "blue", "borderColor": "blue", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u25ce", "textColor": "white"}
+            )
+            marker_e924a78ec17ceb40a5d37e3ae5e0758c.setIcon(beautify_icon_3b46a3e24e11ba8906a70dd5c4305020);
+        
+    
+        var popup_6923c3951b73126acb8f4e48e8f60c23 = L.popup({"maxWidth": 200});
+
+        
+            var html_ed25c8d12076de2a49bc97b4ed319e10 = $(`<div id="html_ed25c8d12076de2a49bc97b4ed319e10" style="width: 100.0%; height: 100.0%;"><b>Moldova</b><br>EU(非欧盟)</div>`)[0];
+            popup_6923c3951b73126acb8f4e48e8f60c23.setContent(html_ed25c8d12076de2a49bc97b4ed319e10);
+        
+
+        marker_e924a78ec17ceb40a5d37e3ae5e0758c.bindPopup(popup_6923c3951b73126acb8f4e48e8f60c23)
+        ;
+
+        
+    
+    
+            marker_e924a78ec17ceb40a5d37e3ae5e0758c.bindTooltip(
+                `<div>
+                     Moldova
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_d7ba397b65ad91316a83943c630fad73 = L.marker(
+                [35.1856, 33.3823],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_69a79b7bc2733d43deb6adcf895cf785 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_d7ba397b65ad91316a83943c630fad73.setIcon(beautify_icon_69a79b7bc2733d43deb6adcf895cf785);
+        
+    
+        var popup_3d92cfc6f700229d2c2c890d93cb1fe4 = L.popup({"maxWidth": 200});
+
+        
+            var html_7778cec11884087028e368742ca52581 = $(`<div id="html_7778cec11884087028e368742ca52581" style="width: 100.0%; height: 100.0%;"><b>Cyprus</b><br>EU(欧盟)</div>`)[0];
+            popup_3d92cfc6f700229d2c2c890d93cb1fe4.setContent(html_7778cec11884087028e368742ca52581);
+        
+
+        marker_d7ba397b65ad91316a83943c630fad73.bindPopup(popup_3d92cfc6f700229d2c2c890d93cb1fe4)
+        ;
+
+        
+    
+    
+            marker_d7ba397b65ad91316a83943c630fad73.bindTooltip(
+                `<div>
+                     Cyprus
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_32a42265c11fc2a7d9630adaf570dd13 = L.marker(
+                [50.8503, 4.3517],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_bc6bdb83a1332d1f7cc2b47ec25c334c = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_32a42265c11fc2a7d9630adaf570dd13.setIcon(beautify_icon_bc6bdb83a1332d1f7cc2b47ec25c334c);
+        
+    
+        var popup_7318817f58490720c2e2680c746b2c23 = L.popup({"maxWidth": 200});
+
+        
+            var html_462a16440a74df1c999d7b5f55eb52b3 = $(`<div id="html_462a16440a74df1c999d7b5f55eb52b3" style="width: 100.0%; height: 100.0%;"><b>Belgium</b><br>EU(欧盟)</div>`)[0];
+            popup_7318817f58490720c2e2680c746b2c23.setContent(html_462a16440a74df1c999d7b5f55eb52b3);
+        
+
+        marker_32a42265c11fc2a7d9630adaf570dd13.bindPopup(popup_7318817f58490720c2e2680c746b2c23)
+        ;
+
+        
+    
+    
+            marker_32a42265c11fc2a7d9630adaf570dd13.bindTooltip(
+                `<div>
+                     Belgium
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_1fff6cf3dc9ab8bededda4682dd3a697 = L.marker(
+                [42.6977, 23.3219],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_71a7affeed43f8d0abb82f321cf2b19a = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_1fff6cf3dc9ab8bededda4682dd3a697.setIcon(beautify_icon_71a7affeed43f8d0abb82f321cf2b19a);
+        
+    
+        var popup_3fb595afe6890df9a6de35dcbdd99435 = L.popup({"maxWidth": 200});
+
+        
+            var html_314d45843584bc3f0184c006aef820c8 = $(`<div id="html_314d45843584bc3f0184c006aef820c8" style="width: 100.0%; height: 100.0%;"><b>Bulgaria</b><br>EU(欧盟)</div>`)[0];
+            popup_3fb595afe6890df9a6de35dcbdd99435.setContent(html_314d45843584bc3f0184c006aef820c8);
+        
+
+        marker_1fff6cf3dc9ab8bededda4682dd3a697.bindPopup(popup_3fb595afe6890df9a6de35dcbdd99435)
+        ;
+
+        
+    
+    
+            marker_1fff6cf3dc9ab8bededda4682dd3a697.bindTooltip(
+                `<div>
+                     Bulgaria
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_0d48834c1248777465bd867a60f0504e = L.marker(
+                [45.815, 15.9819],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_d4fc1665f5bac5e9bb2d87bf048936ac = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_0d48834c1248777465bd867a60f0504e.setIcon(beautify_icon_d4fc1665f5bac5e9bb2d87bf048936ac);
+        
+    
+        var popup_0c0815602d66231a1946164226d273d8 = L.popup({"maxWidth": 200});
+
+        
+            var html_3f79603e66676595107bb3904d5123cc = $(`<div id="html_3f79603e66676595107bb3904d5123cc" style="width: 100.0%; height: 100.0%;"><b>Croatia</b><br>EU(欧盟)</div>`)[0];
+            popup_0c0815602d66231a1946164226d273d8.setContent(html_3f79603e66676595107bb3904d5123cc);
+        
+
+        marker_0d48834c1248777465bd867a60f0504e.bindPopup(popup_0c0815602d66231a1946164226d273d8)
+        ;
+
+        
+    
+    
+            marker_0d48834c1248777465bd867a60f0504e.bindTooltip(
+                `<div>
+                     Croatia
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_e2cd4f2945b49b0a3c2398648ab03c99 = L.marker(
+                [55.6761, 12.5683],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_95cc950260add02fafbafec2981a2ed6 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_e2cd4f2945b49b0a3c2398648ab03c99.setIcon(beautify_icon_95cc950260add02fafbafec2981a2ed6);
+        
+    
+        var popup_bc3c32a0474e1320110aeb6ec826b9ca = L.popup({"maxWidth": 200});
+
+        
+            var html_51f5875f2f18bd74448eaf7047249cc5 = $(`<div id="html_51f5875f2f18bd74448eaf7047249cc5" style="width: 100.0%; height: 100.0%;"><b>Denmark</b><br>EU(欧盟)</div>`)[0];
+            popup_bc3c32a0474e1320110aeb6ec826b9ca.setContent(html_51f5875f2f18bd74448eaf7047249cc5);
+        
+
+        marker_e2cd4f2945b49b0a3c2398648ab03c99.bindPopup(popup_bc3c32a0474e1320110aeb6ec826b9ca)
+        ;
+
+        
+    
+    
+            marker_e2cd4f2945b49b0a3c2398648ab03c99.bindTooltip(
+                `<div>
+                     Denmark
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_957b9869750818d1aa49682617ca3861 = L.marker(
+                [59.437, 24.7536],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_dc291e3f93c0dd1840d7939909a22383 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_957b9869750818d1aa49682617ca3861.setIcon(beautify_icon_dc291e3f93c0dd1840d7939909a22383);
+        
+    
+        var popup_78d80fffa8992f557a88b27080e90ae0 = L.popup({"maxWidth": 200});
+
+        
+            var html_0053d1db85b8924996256ee7bca2a058 = $(`<div id="html_0053d1db85b8924996256ee7bca2a058" style="width: 100.0%; height: 100.0%;"><b>Estonia</b><br>EU(欧盟)</div>`)[0];
+            popup_78d80fffa8992f557a88b27080e90ae0.setContent(html_0053d1db85b8924996256ee7bca2a058);
+        
+
+        marker_957b9869750818d1aa49682617ca3861.bindPopup(popup_78d80fffa8992f557a88b27080e90ae0)
+        ;
+
+        
+    
+    
+            marker_957b9869750818d1aa49682617ca3861.bindTooltip(
+                `<div>
+                     Estonia
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_3a2f7002b799577bade6b1b238aa89e0 = L.marker(
+                [60.1695, 24.9354],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_e731d15d0eee59e0d9cb00fb088fb5a7 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_3a2f7002b799577bade6b1b238aa89e0.setIcon(beautify_icon_e731d15d0eee59e0d9cb00fb088fb5a7);
+        
+    
+        var popup_592820dfbdb22b70e165fba0ab4537da = L.popup({"maxWidth": 200});
+
+        
+            var html_6f165aeca9c327acd295cd6e9559771d = $(`<div id="html_6f165aeca9c327acd295cd6e9559771d" style="width: 100.0%; height: 100.0%;"><b>Finland</b><br>EU(欧盟)</div>`)[0];
+            popup_592820dfbdb22b70e165fba0ab4537da.setContent(html_6f165aeca9c327acd295cd6e9559771d);
+        
+
+        marker_3a2f7002b799577bade6b1b238aa89e0.bindPopup(popup_592820dfbdb22b70e165fba0ab4537da)
+        ;
+
+        
+    
+    
+            marker_3a2f7002b799577bade6b1b238aa89e0.bindTooltip(
+                `<div>
+                     Finland
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_538ca1a5bfdaa26291d0c05edb1073d6 = L.marker(
+                [48.8566, 2.3522],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_9cdacea704eba0c1e4244d37fdc4b2ad = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_538ca1a5bfdaa26291d0c05edb1073d6.setIcon(beautify_icon_9cdacea704eba0c1e4244d37fdc4b2ad);
+        
+    
+        var popup_05ae3a896a85320bb89bbb156b30e55d = L.popup({"maxWidth": 200});
+
+        
+            var html_56d1b55be5518c6f4aa7618aaa9b3867 = $(`<div id="html_56d1b55be5518c6f4aa7618aaa9b3867" style="width: 100.0%; height: 100.0%;"><b>France</b><br>EU(欧盟)</div>`)[0];
+            popup_05ae3a896a85320bb89bbb156b30e55d.setContent(html_56d1b55be5518c6f4aa7618aaa9b3867);
+        
+
+        marker_538ca1a5bfdaa26291d0c05edb1073d6.bindPopup(popup_05ae3a896a85320bb89bbb156b30e55d)
+        ;
+
+        
+    
+    
+            marker_538ca1a5bfdaa26291d0c05edb1073d6.bindTooltip(
+                `<div>
+                     France
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_b6c69e96c1105a257a17670d972054b6 = L.marker(
+                [52.52, 13.405],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_6307208f6a9e20e028fefc7526fd4ce8 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_b6c69e96c1105a257a17670d972054b6.setIcon(beautify_icon_6307208f6a9e20e028fefc7526fd4ce8);
+        
+    
+        var popup_511826d339ef04dff2845ec5d08eddb4 = L.popup({"maxWidth": 200});
+
+        
+            var html_bacf98dc06ce2d00788fee68fbfbcf55 = $(`<div id="html_bacf98dc06ce2d00788fee68fbfbcf55" style="width: 100.0%; height: 100.0%;"><b>Germany</b><br>EU(欧盟)</div>`)[0];
+            popup_511826d339ef04dff2845ec5d08eddb4.setContent(html_bacf98dc06ce2d00788fee68fbfbcf55);
+        
+
+        marker_b6c69e96c1105a257a17670d972054b6.bindPopup(popup_511826d339ef04dff2845ec5d08eddb4)
+        ;
+
+        
+    
+    
+            marker_b6c69e96c1105a257a17670d972054b6.bindTooltip(
+                `<div>
+                     Germany
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_c93df5213e33db671fc7efbbfd6e3d37 = L.marker(
+                [37.9838, 23.7275],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_4406573a070b4e649e8088416b18145d = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_c93df5213e33db671fc7efbbfd6e3d37.setIcon(beautify_icon_4406573a070b4e649e8088416b18145d);
+        
+    
+        var popup_8135f42d169497043db8d2f72c92b037 = L.popup({"maxWidth": 200});
+
+        
+            var html_3b7f57a0abd4674d367d615566413055 = $(`<div id="html_3b7f57a0abd4674d367d615566413055" style="width: 100.0%; height: 100.0%;"><b>Greece</b><br>EU(欧盟)</div>`)[0];
+            popup_8135f42d169497043db8d2f72c92b037.setContent(html_3b7f57a0abd4674d367d615566413055);
+        
+
+        marker_c93df5213e33db671fc7efbbfd6e3d37.bindPopup(popup_8135f42d169497043db8d2f72c92b037)
+        ;
+
+        
+    
+    
+            marker_c93df5213e33db671fc7efbbfd6e3d37.bindTooltip(
+                `<div>
+                     Greece
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_5d6bda6174500b306902670bac7bb42b = L.marker(
+                [47.4979, 19.0402],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_079dddf6ddb1eeab6c3056d7e4860d33 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_5d6bda6174500b306902670bac7bb42b.setIcon(beautify_icon_079dddf6ddb1eeab6c3056d7e4860d33);
+        
+    
+        var popup_83178da09724d586328c2be17c16fa75 = L.popup({"maxWidth": 200});
+
+        
+            var html_9ecf9ec4463d25c77c48f46382db496e = $(`<div id="html_9ecf9ec4463d25c77c48f46382db496e" style="width: 100.0%; height: 100.0%;"><b>Hungary</b><br>EU(欧盟)</div>`)[0];
+            popup_83178da09724d586328c2be17c16fa75.setContent(html_9ecf9ec4463d25c77c48f46382db496e);
+        
+
+        marker_5d6bda6174500b306902670bac7bb42b.bindPopup(popup_83178da09724d586328c2be17c16fa75)
+        ;
+
+        
+    
+    
+            marker_5d6bda6174500b306902670bac7bb42b.bindTooltip(
+                `<div>
+                     Hungary
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_cbbe2bdcc7992fff62d8b99f432486be = L.marker(
+                [53.3498, -6.2603],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_169e2bdfaf7e27b20db8c9d55b745fed = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_cbbe2bdcc7992fff62d8b99f432486be.setIcon(beautify_icon_169e2bdfaf7e27b20db8c9d55b745fed);
+        
+    
+        var popup_c8f66b7efd2bda25db9841a4563e48c9 = L.popup({"maxWidth": 200});
+
+        
+            var html_f29f666df948c10166cf6848bd1f3ff1 = $(`<div id="html_f29f666df948c10166cf6848bd1f3ff1" style="width: 100.0%; height: 100.0%;"><b>Ireland</b><br>EU(欧盟)</div>`)[0];
+            popup_c8f66b7efd2bda25db9841a4563e48c9.setContent(html_f29f666df948c10166cf6848bd1f3ff1);
+        
+
+        marker_cbbe2bdcc7992fff62d8b99f432486be.bindPopup(popup_c8f66b7efd2bda25db9841a4563e48c9)
+        ;
+
+        
+    
+    
+            marker_cbbe2bdcc7992fff62d8b99f432486be.bindTooltip(
+                `<div>
+                     Ireland
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_b62a38e4726bf050765c0172c19a2ecb = L.marker(
+                [41.9028, 12.4964],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_6a75b95a25289d4baf8b33ea8e417cff = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_b62a38e4726bf050765c0172c19a2ecb.setIcon(beautify_icon_6a75b95a25289d4baf8b33ea8e417cff);
+        
+    
+        var popup_bc3f94b0461b85cd599a756d58095a27 = L.popup({"maxWidth": 200});
+
+        
+            var html_ca9a99267dd713ea7466c34d1aaaba11 = $(`<div id="html_ca9a99267dd713ea7466c34d1aaaba11" style="width: 100.0%; height: 100.0%;"><b>Italy</b><br>EU(欧盟)</div>`)[0];
+            popup_bc3f94b0461b85cd599a756d58095a27.setContent(html_ca9a99267dd713ea7466c34d1aaaba11);
+        
+
+        marker_b62a38e4726bf050765c0172c19a2ecb.bindPopup(popup_bc3f94b0461b85cd599a756d58095a27)
+        ;
+
+        
+    
+    
+            marker_b62a38e4726bf050765c0172c19a2ecb.bindTooltip(
+                `<div>
+                     Italy
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_0def123e9bed6af75fa0b9be17fe80eb = L.marker(
+                [56.9496, 24.1052],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_87a9a72b8b9c5a158f2a4a1dd1e1124b = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_0def123e9bed6af75fa0b9be17fe80eb.setIcon(beautify_icon_87a9a72b8b9c5a158f2a4a1dd1e1124b);
+        
+    
+        var popup_cd50eddc61c20e41d071c9ed4f4b6227 = L.popup({"maxWidth": 200});
+
+        
+            var html_b687481dd7c9e1314deee6618dfdf664 = $(`<div id="html_b687481dd7c9e1314deee6618dfdf664" style="width: 100.0%; height: 100.0%;"><b>Latvia</b><br>EU(欧盟)</div>`)[0];
+            popup_cd50eddc61c20e41d071c9ed4f4b6227.setContent(html_b687481dd7c9e1314deee6618dfdf664);
+        
+
+        marker_0def123e9bed6af75fa0b9be17fe80eb.bindPopup(popup_cd50eddc61c20e41d071c9ed4f4b6227)
+        ;
+
+        
+    
+    
+            marker_0def123e9bed6af75fa0b9be17fe80eb.bindTooltip(
+                `<div>
+                     Latvia
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_c62493043587a629ceff1a50ccc2dec5 = L.marker(
+                [54.6872, 25.2797],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_30ab73b18f9cd70d451dab4c9d2d9759 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_c62493043587a629ceff1a50ccc2dec5.setIcon(beautify_icon_30ab73b18f9cd70d451dab4c9d2d9759);
+        
+    
+        var popup_2aeeb2ef59bf73404fbfa550053659d7 = L.popup({"maxWidth": 200});
+
+        
+            var html_e72922b202cbccfc218d676fa58b45c4 = $(`<div id="html_e72922b202cbccfc218d676fa58b45c4" style="width: 100.0%; height: 100.0%;"><b>Lithuania</b><br>EU(欧盟)</div>`)[0];
+            popup_2aeeb2ef59bf73404fbfa550053659d7.setContent(html_e72922b202cbccfc218d676fa58b45c4);
+        
+
+        marker_c62493043587a629ceff1a50ccc2dec5.bindPopup(popup_2aeeb2ef59bf73404fbfa550053659d7)
+        ;
+
+        
+    
+    
+            marker_c62493043587a629ceff1a50ccc2dec5.bindTooltip(
+                `<div>
+                     Lithuania
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_42e7ed3c8ce2d88228a09b99326f2cad = L.marker(
+                [35.8997, 14.5146],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_3235bc19d038bd06373d297ecd48e8a1 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_42e7ed3c8ce2d88228a09b99326f2cad.setIcon(beautify_icon_3235bc19d038bd06373d297ecd48e8a1);
+        
+    
+        var popup_01d34fb87f1fc058c742b2e5af654441 = L.popup({"maxWidth": 200});
+
+        
+            var html_93e1dc112bb9b26fb962b8950b5adcf4 = $(`<div id="html_93e1dc112bb9b26fb962b8950b5adcf4" style="width: 100.0%; height: 100.0%;"><b>Malta</b><br>EU(欧盟)</div>`)[0];
+            popup_01d34fb87f1fc058c742b2e5af654441.setContent(html_93e1dc112bb9b26fb962b8950b5adcf4);
+        
+
+        marker_42e7ed3c8ce2d88228a09b99326f2cad.bindPopup(popup_01d34fb87f1fc058c742b2e5af654441)
+        ;
+
+        
+    
+    
+            marker_42e7ed3c8ce2d88228a09b99326f2cad.bindTooltip(
+                `<div>
+                     Malta
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_1b6d87aac1ef04228acc9abb3dff5361 = L.marker(
+                [52.3676, 4.9041],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_01b57e32739b79acc103049aecd755fe = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_1b6d87aac1ef04228acc9abb3dff5361.setIcon(beautify_icon_01b57e32739b79acc103049aecd755fe);
+        
+    
+        var popup_fd7af9c289afb919f655b9f4263e7e60 = L.popup({"maxWidth": 200});
+
+        
+            var html_8383b897e63b05b08cef9f06dc943f13 = $(`<div id="html_8383b897e63b05b08cef9f06dc943f13" style="width: 100.0%; height: 100.0%;"><b>Netherlands</b><br>EU(欧盟)</div>`)[0];
+            popup_fd7af9c289afb919f655b9f4263e7e60.setContent(html_8383b897e63b05b08cef9f06dc943f13);
+        
+
+        marker_1b6d87aac1ef04228acc9abb3dff5361.bindPopup(popup_fd7af9c289afb919f655b9f4263e7e60)
+        ;
+
+        
+    
+    
+            marker_1b6d87aac1ef04228acc9abb3dff5361.bindTooltip(
+                `<div>
+                     Netherlands
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_d7e86400c8c2c4a78a65d008bb00f0ef = L.marker(
+                [52.2297, 21.0122],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_8a65f8bf38b0b85a37685b2d1c8fa1df = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_d7e86400c8c2c4a78a65d008bb00f0ef.setIcon(beautify_icon_8a65f8bf38b0b85a37685b2d1c8fa1df);
+        
+    
+        var popup_33314b99f9b470235c6988e1825655f6 = L.popup({"maxWidth": 200});
+
+        
+            var html_b3dca888d87f21d42f4807475841d9b5 = $(`<div id="html_b3dca888d87f21d42f4807475841d9b5" style="width: 100.0%; height: 100.0%;"><b>Poland</b><br>EU(欧盟)</div>`)[0];
+            popup_33314b99f9b470235c6988e1825655f6.setContent(html_b3dca888d87f21d42f4807475841d9b5);
+        
+
+        marker_d7e86400c8c2c4a78a65d008bb00f0ef.bindPopup(popup_33314b99f9b470235c6988e1825655f6)
+        ;
+
+        
+    
+    
+            marker_d7e86400c8c2c4a78a65d008bb00f0ef.bindTooltip(
+                `<div>
+                     Poland
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_03d2d5ed07c57e231383d394e406cf91 = L.marker(
+                [38.7169, -9.1399],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_3faaed226a05bc233124ce480d42a96b = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_03d2d5ed07c57e231383d394e406cf91.setIcon(beautify_icon_3faaed226a05bc233124ce480d42a96b);
+        
+    
+        var popup_fa847d3bc17b4759505d3f7c93c7dd7f = L.popup({"maxWidth": 200});
+
+        
+            var html_5c4c50b151a208150d2359a4e9cae6d0 = $(`<div id="html_5c4c50b151a208150d2359a4e9cae6d0" style="width: 100.0%; height: 100.0%;"><b>Portugal</b><br>EU(欧盟)</div>`)[0];
+            popup_fa847d3bc17b4759505d3f7c93c7dd7f.setContent(html_5c4c50b151a208150d2359a4e9cae6d0);
+        
+
+        marker_03d2d5ed07c57e231383d394e406cf91.bindPopup(popup_fa847d3bc17b4759505d3f7c93c7dd7f)
+        ;
+
+        
+    
+    
+            marker_03d2d5ed07c57e231383d394e406cf91.bindTooltip(
+                `<div>
+                     Portugal
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_39f2a6775eb2db39e0e46454ff11273b = L.marker(
+                [44.4268, 26.1025],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_968cdc0a496b3c1c33cd8733c9474573 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_39f2a6775eb2db39e0e46454ff11273b.setIcon(beautify_icon_968cdc0a496b3c1c33cd8733c9474573);
+        
+    
+        var popup_82256d32cbc3e752670c80aa61e06154 = L.popup({"maxWidth": 200});
+
+        
+            var html_ded5e8743ff90907ffd917fdd10b02d0 = $(`<div id="html_ded5e8743ff90907ffd917fdd10b02d0" style="width: 100.0%; height: 100.0%;"><b>Romania</b><br>EU(欧盟)</div>`)[0];
+            popup_82256d32cbc3e752670c80aa61e06154.setContent(html_ded5e8743ff90907ffd917fdd10b02d0);
+        
+
+        marker_39f2a6775eb2db39e0e46454ff11273b.bindPopup(popup_82256d32cbc3e752670c80aa61e06154)
+        ;
+
+        
+    
+    
+            marker_39f2a6775eb2db39e0e46454ff11273b.bindTooltip(
+                `<div>
+                     Romania
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_aa1fd4b4d7c474ccbc966e83fd5c9d3c = L.marker(
+                [48.1486, 17.1077],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_4dec1ec982f70efad8383c394f37784f = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_aa1fd4b4d7c474ccbc966e83fd5c9d3c.setIcon(beautify_icon_4dec1ec982f70efad8383c394f37784f);
+        
+    
+        var popup_1ba6e7d7d2b2a718381eb2ca5fc72ad5 = L.popup({"maxWidth": 200});
+
+        
+            var html_cc815f856cb33af78d95518ea0e5239c = $(`<div id="html_cc815f856cb33af78d95518ea0e5239c" style="width: 100.0%; height: 100.0%;"><b>Slovakia</b><br>EU(欧盟)</div>`)[0];
+            popup_1ba6e7d7d2b2a718381eb2ca5fc72ad5.setContent(html_cc815f856cb33af78d95518ea0e5239c);
+        
+
+        marker_aa1fd4b4d7c474ccbc966e83fd5c9d3c.bindPopup(popup_1ba6e7d7d2b2a718381eb2ca5fc72ad5)
+        ;
+
+        
+    
+    
+            marker_aa1fd4b4d7c474ccbc966e83fd5c9d3c.bindTooltip(
+                `<div>
+                     Slovakia
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_adbc8c93e093e9f395ca48a0c6ed7dbc = L.marker(
+                [46.0569, 14.5058],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_61414b801ccaf7aed9a410725b430068 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_adbc8c93e093e9f395ca48a0c6ed7dbc.setIcon(beautify_icon_61414b801ccaf7aed9a410725b430068);
+        
+    
+        var popup_ac78f5c1bcf2f518e5761434b527d9f0 = L.popup({"maxWidth": 200});
+
+        
+            var html_2474ac6ffc8e6fc243cf712d4546f61b = $(`<div id="html_2474ac6ffc8e6fc243cf712d4546f61b" style="width: 100.0%; height: 100.0%;"><b>Slovenia</b><br>EU(欧盟)</div>`)[0];
+            popup_ac78f5c1bcf2f518e5761434b527d9f0.setContent(html_2474ac6ffc8e6fc243cf712d4546f61b);
+        
+
+        marker_adbc8c93e093e9f395ca48a0c6ed7dbc.bindPopup(popup_ac78f5c1bcf2f518e5761434b527d9f0)
+        ;
+
+        
+    
+    
+            marker_adbc8c93e093e9f395ca48a0c6ed7dbc.bindTooltip(
+                `<div>
+                     Slovenia
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_cc22045b297eee8e4948512bd1b9f5d9 = L.marker(
+                [40.4168, -3.7038],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_e2830c89314eca4e843d532b933ac5f5 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_cc22045b297eee8e4948512bd1b9f5d9.setIcon(beautify_icon_e2830c89314eca4e843d532b933ac5f5);
+        
+    
+        var popup_da058a5ed9cccae4f689787f04cb2efb = L.popup({"maxWidth": 200});
+
+        
+            var html_cb13c9ba6aa63467d8f778ca8ee5eb99 = $(`<div id="html_cb13c9ba6aa63467d8f778ca8ee5eb99" style="width: 100.0%; height: 100.0%;"><b>Spain</b><br>EU(欧盟)</div>`)[0];
+            popup_da058a5ed9cccae4f689787f04cb2efb.setContent(html_cb13c9ba6aa63467d8f778ca8ee5eb99);
+        
+
+        marker_cc22045b297eee8e4948512bd1b9f5d9.bindPopup(popup_da058a5ed9cccae4f689787f04cb2efb)
+        ;
+
+        
+    
+    
+            marker_cc22045b297eee8e4948512bd1b9f5d9.bindTooltip(
+                `<div>
+                     Spain
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_bd89737c2d016a5ddc5bb1656d245021 = L.marker(
+                [59.3293, 18.0686],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_eaf3fb7ba8611e011994d75531386944 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_bd89737c2d016a5ddc5bb1656d245021.setIcon(beautify_icon_eaf3fb7ba8611e011994d75531386944);
+        
+    
+        var popup_7fb68241aacf03b7cbb4fcfa8700633f = L.popup({"maxWidth": 200});
+
+        
+            var html_8b5374a8dc52ebc76628064522f0161d = $(`<div id="html_8b5374a8dc52ebc76628064522f0161d" style="width: 100.0%; height: 100.0%;"><b>Sweden</b><br>EU(欧盟)</div>`)[0];
+            popup_7fb68241aacf03b7cbb4fcfa8700633f.setContent(html_8b5374a8dc52ebc76628064522f0161d);
+        
+
+        marker_bd89737c2d016a5ddc5bb1656d245021.bindPopup(popup_7fb68241aacf03b7cbb4fcfa8700633f)
+        ;
+
+        
+    
+    
+            marker_bd89737c2d016a5ddc5bb1656d245021.bindTooltip(
+                `<div>
+                     Sweden
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_9b1e065ba734bf2cd84529facc83ce69 = L.marker(
+                [48.2082, 16.3738],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_eca5c17e0a6a8105c88b5bf122b982d1 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_9b1e065ba734bf2cd84529facc83ce69.setIcon(beautify_icon_eca5c17e0a6a8105c88b5bf122b982d1);
+        
+    
+        var popup_09a253167e9e728d87a510d6cb9619a4 = L.popup({"maxWidth": 200});
+
+        
+            var html_4c7e4f62885220be1763217144db8452 = $(`<div id="html_4c7e4f62885220be1763217144db8452" style="width: 100.0%; height: 100.0%;"><b>Austria</b><br>EU(欧盟)</div>`)[0];
+            popup_09a253167e9e728d87a510d6cb9619a4.setContent(html_4c7e4f62885220be1763217144db8452);
+        
+
+        marker_9b1e065ba734bf2cd84529facc83ce69.bindPopup(popup_09a253167e9e728d87a510d6cb9619a4)
+        ;
+
+        
+    
+    
+            marker_9b1e065ba734bf2cd84529facc83ce69.bindTooltip(
+                `<div>
+                     Austria
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_b7c7fd80837cbcdf7ef3f8be4d2ea3d3 = L.marker(
+                [49.6117, 6.1319],
+                {}
+            ).addTo(map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec);
+        
+    
+            var beautify_icon_69f4e1bac1d8a19d4fb60962f79ed4f9 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "green", "borderColor": "green", "borderWidth": 3, "iconShape": "marker", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": true, "text": "\u2605", "textColor": "white"}
+            )
+            marker_b7c7fd80837cbcdf7ef3f8be4d2ea3d3.setIcon(beautify_icon_69f4e1bac1d8a19d4fb60962f79ed4f9);
+        
+    
+        var popup_1206945a6a74e41a5cce04dd5cd89319 = L.popup({"maxWidth": 200});
+
+        
+            var html_b813cd68c04f8646932ee93e260df436 = $(`<div id="html_b813cd68c04f8646932ee93e260df436" style="width: 100.0%; height: 100.0%;"><b>Luxembourg</b><br>EU(欧盟)</div>`)[0];
+            popup_1206945a6a74e41a5cce04dd5cd89319.setContent(html_b813cd68c04f8646932ee93e260df436);
+        
+
+        marker_b7c7fd80837cbcdf7ef3f8be4d2ea3d3.bindPopup(popup_1206945a6a74e41a5cce04dd5cd89319)
+        ;
+
+        
+    
+    
+            marker_b7c7fd80837cbcdf7ef3f8be4d2ea3d3.bindTooltip(
+                `<div>
+                     Luxembourg
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var measure_control_763b8c2bfd39ab8e28bce796860c70ef = new L.Control.Measure(
+                {"position": "topright", "primaryAreaUnit": "sqmeters", "primaryLengthUnit": "kilometers", "secondaryAreaUnit": "acres", "secondaryLengthUnit": "miles"});
+            map_0b8f2dacaa2bdc8e60bc08d1bdbf7cec.addControl(measure_control_763b8c2bfd39ab8e28bce796860c70ef);
+
+        
+</script>
 </html>
