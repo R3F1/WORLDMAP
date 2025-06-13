@@ -1,30 +1,27 @@
 <!DOCTYPE html>
+
 <html>
 <head>
-    
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    
-        <script>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<script>
             L_NO_TOUCH = false;
             L_DISABLE_3D = false;
         </script>
-    
-    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
-    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
-    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.js"></script>
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.css"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
-    
-            <meta name="viewport" content="width=device-width,
-                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-            <style>
+<style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+<style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.css" rel="stylesheet"/>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet"/>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" rel="stylesheet"/>
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css" rel="stylesheet"/>
+<meta content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<style>
                 #map_c58757c675eea6b7641e1a8c6063d346 {
                     position: relative;
                     width: 100.0%;
@@ -33,15 +30,289 @@
                     top: 0.0%;
                 }
             </style>
-        
-    <script src="https://cdn.jsdelivr.net/gh/ljagis/leaflet-measure@2.1.7/dist/leaflet-measure.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ljagis/leaflet-measure@2.1.7/dist/leaflet-measure.min.css"/>
+<script src="https://cdn.jsdelivr.net/gh/ljagis/leaflet-measure@2.1.7/dist/leaflet-measure.min.js"></script>
+<link href="https://cdn.jsdelivr.net/gh/ljagis/leaflet-measure@2.1.7/dist/leaflet-measure.min.css" rel="stylesheet"/>
 </head>
-<body>
-    
-    
-            <div class="folium-map" id="map_c58757c675eea6b7641e1a8c6063d346" ></div>
-        
+<body style="margin-bottom: 100px;">
+<div class="folium-map" id="map_c58757c675eea6b7641e1a8c6063d346"></div>
+<style>
+#distance-table {
+  position: relative;
+  max-width: 900px;
+  margin: 40px auto;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  overflow-x: auto;
+  font-family: sans-serif;
+}
+#distance-table h2 {
+  text-align: center;
+  margin-bottom: 1em;
+}
+#distance-table .table {
+  width: 100%;
+  border-collapse: collapse;
+}
+#distance-table .table th, #distance-table .table td {
+  padding: 8px;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+</style>
+<div id="distance-table">
+<h2>Odległości od Polski (w kilometrach)</h2>
+<table class="dataframe table table-striped">
+<thead>
+<tr style="text-align: right;">
+<th>Region</th>
+<th>Country</th>
+<th>Distance from Poland (km)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>EU(欧盟)</td>
+<td>Czech</td>
+<td>348</td>
+</tr>
+<tr>
+<td>EU(欧盟)</td>
+<td>Slovakia</td>
+<td>364</td>
+</tr>
+<tr>
+<td>EU(欧盟)</td>
+<td>Lithuania</td>
+<td>479</td>
+</tr>
+<tr>
+<td>EU(欧盟)</td>
+<td>Hungary</td>
+<td>530</td>
+</tr>
+<tr>
+<td>EU(欧盟)</td>
+<td>Austria</td>
+<td>591</td>
+</tr>
+<tr>
+<td>EU(欧盟)</td>
+<td>Germany</td>
+<td>609</td>
+</tr>
+<tr>
+<td>EU(非欧盟)</td>
+<td>Belarus</td>
+<td>626</td>
+</tr>
+<tr>
+<td>EU(欧盟)</td>
+<td>Latvia</td>
+<td>656</td>
+</tr>
+<tr>
+<td>EU(欧盟)</td>
+<td>Slovenia</td>
+<td>709</td>
+</tr>
+<tr>
+<td>EU(欧盟)</td>
+<td>Romania</td>
+<td>789</td>
+</tr>
+<tr>
+<td>EU(欧盟)</td>
+<td>Denmark</td>
+<td>794</td>
+</tr>
+<tr>
+<td>EU(欧盟)</td>
+<td>Croatia</td>
+<td>812</td>
+</tr>
+<tr>
+<td>EU(欧盟)</td>
+<td>Estonia</td>
+<td>831</td>
+</tr>
+<tr>
+<td>EU(非欧盟)</td>
+<td>Moldova</td>
+<td>833</td>
+</tr>
+<tr>
+<td>EU(非欧盟)</td>
+<td>Bosnia and Hercegovina</td>
+<td>868</td>
+</tr>
+<tr>
+<td>EU(非欧盟)</td>
+<td>Serbia</td>
+<td>890</td>
+</tr>
+<tr>
+<td>EU(非欧盟)</td>
+<td>Yugoslavia</td>
+<td>891</td>
+</tr>
+<tr>
+<td>EU(欧盟)</td>
+<td>Sweden</td>
+<td>915</td>
+</tr>
+<tr>
+<td>EU(非欧盟)</td>
+<td>Ukraine</td>
+<td>944</td>
+</tr>
+<tr>
+<td>EU(欧盟)</td>
+<td>Luxembourg</td>
+<td>944</td>
+</tr>
+<tr>
+<td>EU(欧盟)</td>
+<td>Netherlands</td>
+<td>950</td>
+</tr>
+<tr>
+<td>EU(非欧盟)</td>
+<td>Switzerland</td>
+<td>973</td>
+</tr>
+<tr>
+<td>EU(非欧盟)</td>
+<td>Montenegro</td>
+<td>1024</td>
+</tr>
+<tr>
+<td>EU(欧盟)</td>
+<td>Belgium</td>
+<td>1036</td>
+</tr>
+<tr>
+<td>EU(非欧盟)</td>
+<td>Kosovo</td>
+<td>1044</td>
+</tr>
+<tr>
+<td>EU(欧盟)</td>
+<td>Bulgaria</td>
+<td>1127</td>
+</tr>
+<tr>
+<td>EU(非欧盟)</td>
+<td>Norway</td>
+<td>1157</td>
+</tr>
+<tr>
+<td>EU(非欧盟)</td>
+<td>Macedonia</td>
+<td>1163</td>
+</tr>
+<tr>
+<td>EU(欧盟)</td>
+<td>Finland</td>
+<td>1183</td>
+</tr>
+<tr>
+<td>EU(非欧盟)</td>
+<td>Albania</td>
+<td>1199</td>
+</tr>
+<tr>
+<td>EU(欧盟)</td>
+<td>Italy</td>
+<td>1223</td>
+</tr>
+<tr>
+<td>EU(欧盟)</td>
+<td>France</td>
+<td>1384</td>
+</tr>
+<tr>
+<td>EU(欧盟)</td>
+<td>Greece</td>
+<td>1443</td>
+</tr>
+<tr>
+<td>EU(非欧盟)</td>
+<td>United Kingdom</td>
+<td>1534</td>
+</tr>
+<tr>
+<td>EU(欧盟)</td>
+<td>Malta</td>
+<td>1816</td>
+</tr>
+<tr>
+<td>EU(欧盟)</td>
+<td>Ireland</td>
+<td>1849</td>
+</tr>
+<tr>
+<td>EU(非欧盟)</td>
+<td>Turkey</td>
+<td>1904</td>
+</tr>
+<tr>
+<td>EU(非欧盟)</td>
+<td>Georgia</td>
+<td>2110</td>
+</tr>
+<tr>
+<td>EU(欧盟)</td>
+<td>Spain</td>
+<td>2163</td>
+</tr>
+<tr>
+<td>EU(欧盟)</td>
+<td>Cyprus</td>
+<td>2185</td>
+</tr>
+<tr>
+<td>EU(欧盟)</td>
+<td>Portugal</td>
+<td>2523</td>
+</tr>
+<tr>
+<td>EU(非欧盟)</td>
+<td>Azerbaijan</td>
+<td>2537</td>
+</tr>
+<tr>
+<td>EU(非欧盟)</td>
+<td>Iceland</td>
+<td>2599</td>
+</tr>
+<tr>
+<td>EU(非欧盟)</td>
+<td>Israel</td>
+<td>2651</td>
+</tr>
+<tr>
+<td>EU(非欧盟)</td>
+<td>United Arab Emirates</td>
+<td>4327</td>
+</tr>
+<tr>
+<td>EU(非欧盟)</td>
+<td>Russia</td>
+<td>4980</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px;">
+<button onclick="window.scrollTo({ top: 0, behavior: 'smooth' });" style="padding:10px 16px; font-size:14px; border:none; border-radius:8px; background:#2196F3; color:white; box-shadow:0 0 8px rgba(0,0,0,0.3); cursor:pointer;">
+    🗺️ Wróć do mapy
+  </button>
+<button onclick="document.getElementById('distance-table').scrollIntoView({ behavior: 'smooth' });" style="padding:10px 16px; font-size:14px; border:none; border-radius:8px; background:#4CAF50; color:white; box-shadow:0 0 8px rgba(0,0,0,0.3); cursor:pointer;">
+    📊 Przejdź do tabeli
+  </button>
+</div>
 </body>
 <script>
     
@@ -51,7 +322,7 @@
                 {
                     center: [50.0, 15.0],
                     crs: L.CRS.EPSG3857,
-                    zoom: 4,
+                    zoom: 3.3,
                     zoomControl: true,
                     preferCanvas: false,
                 }
