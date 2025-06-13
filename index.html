@@ -54,7 +54,7 @@
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
 
-// --- Pomiar między klikniętymi krajami ---
+// --- Pomiar z lepszym stylem etykiety ---
 let distanceMarkers = [];
 let distanceLine = null;
 let distanceLabel = null;
@@ -115,14 +115,14 @@ Object.values(markers).forEach(marker => {
       const p1 = distanceMarkers[0].getLatLng();
       const p2 = distanceMarkers[1].getLatLng();
       const dist = haversine(p1.lat, p1.lng, p2.lat, p2.lng);
-      distanceLine = L.polyline([p1, p2], {color: 'red', weight: 3, dashArray: '5, 10'}).addTo(map);
+      distanceLine = L.polyline([p1, p2], {color: 'red', weight: 3, dashArray: '6, 10'}).addTo(map);
       distanceLabel = L.marker([
         (p1.lat + p2.lat) / 2,
         (p1.lng + p2.lng) / 2
       ], {
         icon: L.divIcon({
-          className: 'distance-label',
-          html: '<div style="background:white;border:1px solid black;padding:4px;border-radius:4px;">' + formatDistance(dist) + '</div>'
+          className: '',
+          html: '<div style="background: #fff; border: 2px solid #444; padding: 6px 10px; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); font-weight: bold; font-size: 14px; color: black;">' + formatDistance(dist) + '</div>'
         })
       }).addTo(map);
     }
@@ -132,7 +132,7 @@ Object.values(markers).forEach(marker => {
 
   <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js">
 
-// --- Pomiar między klikniętymi krajami ---
+// --- Pomiar z lepszym stylem etykiety ---
 let distanceMarkers = [];
 let distanceLine = null;
 let distanceLabel = null;
@@ -193,14 +193,14 @@ Object.values(markers).forEach(marker => {
       const p1 = distanceMarkers[0].getLatLng();
       const p2 = distanceMarkers[1].getLatLng();
       const dist = haversine(p1.lat, p1.lng, p2.lat, p2.lng);
-      distanceLine = L.polyline([p1, p2], {color: 'red', weight: 3, dashArray: '5, 10'}).addTo(map);
+      distanceLine = L.polyline([p1, p2], {color: 'red', weight: 3, dashArray: '6, 10'}).addTo(map);
       distanceLabel = L.marker([
         (p1.lat + p2.lat) / 2,
         (p1.lng + p2.lng) / 2
       ], {
         icon: L.divIcon({
-          className: 'distance-label',
-          html: '<div style="background:white;border:1px solid black;padding:4px;border-radius:4px;">' + formatDistance(dist) + '</div>'
+          className: '',
+          html: '<div style="background: #fff; border: 2px solid #444; padding: 6px 10px; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); font-weight: bold; font-size: 14px; color: black;">' + formatDistance(dist) + '</div>'
         })
       }).addTo(map);
     }
@@ -313,7 +313,7 @@ Object.values(markers).forEach(marker => {
     }).addTo(map);
   
 
-// --- Pomiar między klikniętymi krajami ---
+// --- Pomiar z lepszym stylem etykiety ---
 let distanceMarkers = [];
 let distanceLine = null;
 let distanceLabel = null;
@@ -374,14 +374,14 @@ Object.values(markers).forEach(marker => {
       const p1 = distanceMarkers[0].getLatLng();
       const p2 = distanceMarkers[1].getLatLng();
       const dist = haversine(p1.lat, p1.lng, p2.lat, p2.lng);
-      distanceLine = L.polyline([p1, p2], {color: 'red', weight: 3, dashArray: '5, 10'}).addTo(map);
+      distanceLine = L.polyline([p1, p2], {color: 'red', weight: 3, dashArray: '6, 10'}).addTo(map);
       distanceLabel = L.marker([
         (p1.lat + p2.lat) / 2,
         (p1.lng + p2.lng) / 2
       ], {
         icon: L.divIcon({
-          className: 'distance-label',
-          html: '<div style="background:white;border:1px solid black;padding:4px;border-radius:4px;">' + formatDistance(dist) + '</div>'
+          className: '',
+          html: '<div style="background: #fff; border: 2px solid #444; padding: 6px 10px; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); font-weight: bold; font-size: 14px; color: black;">' + formatDistance(dist) + '</div>'
         })
       }).addTo(map);
     }
