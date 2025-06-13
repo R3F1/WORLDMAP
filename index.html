@@ -52,8 +52,162 @@
     <span style="background:#3498db;"></span> spoza UE
   </div>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+
+// --- Pomiar między klikniętymi krajami ---
+let distanceMarkers = [];
+let distanceLine = null;
+let distanceLabel = null;
+
+function haversine(lat1, lon1, lat2, lon2) {
+  function toRad(x) { return x * Math.PI / 180; }
+  const R = 6371e3;
+  const φ1 = toRad(lat1), φ2 = toRad(lat2);
+  const Δφ = toRad(lat2 - lat1);
+  const Δλ = toRad(lon2 - lon1);
+  const a = Math.sin(Δφ/2)**2 + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+function formatDistance(d) {
+  return (d / 1000).toFixed(2) + " km";
+}
+
+function animatePulse(latlng) {
+  const pulse = L.circle(latlng, {
+    radius: 50000,
+    color: 'red',
+    fillColor: 'red',
+    fillOpacity: 0.3
+  }).addTo(map);
+  let r = 50000;
+  let interval = setInterval(() => {
+    r += 10000;
+    pulse.setRadius(r);
+    pulse.setStyle({opacity: 0.3 - (r - 50000)/200000});
+    if (r > 200000) {
+      map.removeLayer(pulse);
+      clearInterval(interval);
+    }
+  }, 40);
+}
+
+Object.values(markers).forEach(marker => {
+  marker.on("click", function(e) {
+    if (distanceMarkers.length >= 2) {
+      distanceMarkers.forEach(m => map.removeLayer(m));
+      if (distanceLine) map.removeLayer(distanceLine);
+      if (distanceLabel) map.removeLayer(distanceLabel);
+      distanceMarkers = [];
+      distanceLine = null;
+      distanceLabel = null;
+    }
+
+    const clickLatLng = e.latlng;
+    const pulseMarker = L.circleMarker(clickLatLng, {
+      radius: 6, color: 'red', fillColor: 'red', fillOpacity: 1
+    }).addTo(map);
+
+    distanceMarkers.push(pulseMarker);
+    animatePulse(clickLatLng);
+
+    if (distanceMarkers.length === 2) {
+      const p1 = distanceMarkers[0].getLatLng();
+      const p2 = distanceMarkers[1].getLatLng();
+      const dist = haversine(p1.lat, p1.lng, p2.lat, p2.lng);
+      distanceLine = L.polyline([p1, p2], {color: 'red', weight: 3, dashArray: '5, 10'}).addTo(map);
+      distanceLabel = L.marker([
+        (p1.lat + p2.lat) / 2,
+        (p1.lng + p2.lng) / 2
+      ], {
+        icon: L.divIcon({
+          className: 'distance-label',
+          html: '<div style="background:white;border:1px solid black;padding:4px;border-radius:4px;">' + formatDistance(dist) + '</div>'
+        })
+      }).addTo(map);
+    }
+  });
+});
+</script>
+
+  <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js">
+
+// --- Pomiar między klikniętymi krajami ---
+let distanceMarkers = [];
+let distanceLine = null;
+let distanceLabel = null;
+
+function haversine(lat1, lon1, lat2, lon2) {
+  function toRad(x) { return x * Math.PI / 180; }
+  const R = 6371e3;
+  const φ1 = toRad(lat1), φ2 = toRad(lat2);
+  const Δφ = toRad(lat2 - lat1);
+  const Δλ = toRad(lon2 - lon1);
+  const a = Math.sin(Δφ/2)**2 + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+function formatDistance(d) {
+  return (d / 1000).toFixed(2) + " km";
+}
+
+function animatePulse(latlng) {
+  const pulse = L.circle(latlng, {
+    radius: 50000,
+    color: 'red',
+    fillColor: 'red',
+    fillOpacity: 0.3
+  }).addTo(map);
+  let r = 50000;
+  let interval = setInterval(() => {
+    r += 10000;
+    pulse.setRadius(r);
+    pulse.setStyle({opacity: 0.3 - (r - 50000)/200000});
+    if (r > 200000) {
+      map.removeLayer(pulse);
+      clearInterval(interval);
+    }
+  }, 40);
+}
+
+Object.values(markers).forEach(marker => {
+  marker.on("click", function(e) {
+    if (distanceMarkers.length >= 2) {
+      distanceMarkers.forEach(m => map.removeLayer(m));
+      if (distanceLine) map.removeLayer(distanceLine);
+      if (distanceLabel) map.removeLayer(distanceLabel);
+      distanceMarkers = [];
+      distanceLine = null;
+      distanceLabel = null;
+    }
+
+    const clickLatLng = e.latlng;
+    const pulseMarker = L.circleMarker(clickLatLng, {
+      radius: 6, color: 'red', fillColor: 'red', fillOpacity: 1
+    }).addTo(map);
+
+    distanceMarkers.push(pulseMarker);
+    animatePulse(clickLatLng);
+
+    if (distanceMarkers.length === 2) {
+      const p1 = distanceMarkers[0].getLatLng();
+      const p2 = distanceMarkers[1].getLatLng();
+      const dist = haversine(p1.lat, p1.lng, p2.lat, p2.lng);
+      distanceLine = L.polyline([p1, p2], {color: 'red', weight: 3, dashArray: '5, 10'}).addTo(map);
+      distanceLabel = L.marker([
+        (p1.lat + p2.lat) / 2,
+        (p1.lng + p2.lng) / 2
+      ], {
+        icon: L.divIcon({
+          className: 'distance-label',
+          html: '<div style="background:white;border:1px solid black;padding:4px;border-radius:4px;">' + formatDistance(dist) + '</div>'
+        })
+      }).addTo(map);
+    }
+  });
+});
+</script>
+
 
   <script>
     var map = L.map('map', {
@@ -157,6 +311,83 @@
     .on('markgeocode', function(e) {
       map.setView(e.geocode.center, 5);
     }).addTo(map);
-  </script>
+  
+
+// --- Pomiar między klikniętymi krajami ---
+let distanceMarkers = [];
+let distanceLine = null;
+let distanceLabel = null;
+
+function haversine(lat1, lon1, lat2, lon2) {
+  function toRad(x) { return x * Math.PI / 180; }
+  const R = 6371e3;
+  const φ1 = toRad(lat1), φ2 = toRad(lat2);
+  const Δφ = toRad(lat2 - lat1);
+  const Δλ = toRad(lon2 - lon1);
+  const a = Math.sin(Δφ/2)**2 + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+function formatDistance(d) {
+  return (d / 1000).toFixed(2) + " km";
+}
+
+function animatePulse(latlng) {
+  const pulse = L.circle(latlng, {
+    radius: 50000,
+    color: 'red',
+    fillColor: 'red',
+    fillOpacity: 0.3
+  }).addTo(map);
+  let r = 50000;
+  let interval = setInterval(() => {
+    r += 10000;
+    pulse.setRadius(r);
+    pulse.setStyle({opacity: 0.3 - (r - 50000)/200000});
+    if (r > 200000) {
+      map.removeLayer(pulse);
+      clearInterval(interval);
+    }
+  }, 40);
+}
+
+Object.values(markers).forEach(marker => {
+  marker.on("click", function(e) {
+    if (distanceMarkers.length >= 2) {
+      distanceMarkers.forEach(m => map.removeLayer(m));
+      if (distanceLine) map.removeLayer(distanceLine);
+      if (distanceLabel) map.removeLayer(distanceLabel);
+      distanceMarkers = [];
+      distanceLine = null;
+      distanceLabel = null;
+    }
+
+    const clickLatLng = e.latlng;
+    const pulseMarker = L.circleMarker(clickLatLng, {
+      radius: 6, color: 'red', fillColor: 'red', fillOpacity: 1
+    }).addTo(map);
+
+    distanceMarkers.push(pulseMarker);
+    animatePulse(clickLatLng);
+
+    if (distanceMarkers.length === 2) {
+      const p1 = distanceMarkers[0].getLatLng();
+      const p2 = distanceMarkers[1].getLatLng();
+      const dist = haversine(p1.lat, p1.lng, p2.lat, p2.lng);
+      distanceLine = L.polyline([p1, p2], {color: 'red', weight: 3, dashArray: '5, 10'}).addTo(map);
+      distanceLabel = L.marker([
+        (p1.lat + p2.lat) / 2,
+        (p1.lng + p2.lng) / 2
+      ], {
+        icon: L.divIcon({
+          className: 'distance-label',
+          html: '<div style="background:white;border:1px solid black;padding:4px;border-radius:4px;">' + formatDistance(dist) + '</div>'
+        })
+      }).addTo(map);
+    }
+  });
+});
+</script>
+
 </body>
 </html>
