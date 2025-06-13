@@ -12,7 +12,7 @@
       position: absolute;
       bottom: 30px;
       left: 30px;
-      background-color: white;
+      background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
       padding: 10px;
       border: 2px solid #ccc;
       font-size: 14px;
@@ -93,10 +93,10 @@
       data.list.forEach(country => {
         if (centroids[country]) {
           const marker = L.circleMarker(centroids[country], {
-            radius: 7,
+            radius: 9,
             color: color,
             fillColor: color,
-            fillOpacity: 0.9
+            fillOpacity: 1, weight: 2
           }).addTo(map);
           marker.bindTooltip(country + " (" + region + ")");
           marker.on('click', addMeasurement);
