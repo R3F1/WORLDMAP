@@ -1,55 +1,54 @@
 
 <!DOCTYPE html>
-<html>
+<html lang="pl">
 <head>
-  <meta charset="utf-8">
-  <title>Mapa UE i Non-UE</title>
+  <meta charset="UTF-8">
+  <title>Mapa EU / non-EU z Animacjami</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <style>
-    html, body { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', sans-serif; background: #f7f9fb;}
-    #map { width: 100%; height: 100%; }
+    html, body { margin: 0; height: 100%; font-family: 'Segoe UI', sans-serif; }
+    #map { height: 100%; width: 100%; }
 
     .legend {
       position: absolute;
       bottom: 30px;
       left: 30px;
-      background: rgba(255,255,255,0.95);
-      padding: 15px 20px;
+      background: rgba(255, 255, 255, 0.95);
       border-radius: 10px;
-      border: 1px solid #ccc;
+      box-shadow: 0 0 10px #999;
+      padding: 15px 20px;
       font-size: 15px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      z-index: 9999;
-      transition: all 0.4s ease-in-out;
-      animation: fadeIn 1s ease-out;
+      z-index: 999;
+      animation: fadeIn 1s ease-in-out;
     }
 
-    .leaflet-tooltip {
-      background-color: rgba(0, 0, 0, 0.85);
+    .legend span {
+      display: inline-block;
+      width: 15px;
+      height: 15px;
+      margin-right: 8px;
+      border-radius: 50%;
+    }
+
+    .marker-label {
+      background-color: rgba(0,0,0,0.7);
       color: #fff;
-      font-weight: bold;
-      font-size: 13px;
       padding: 5px 10px;
       border-radius: 6px;
-      transition: all 0.3s ease-in-out;
-      animation: fadeIn 0.7s ease-out;
-    }
-
-    .leaflet-interactive {
-      transition: transform 0.3s ease, fill-opacity 0.3s ease;
-    }
-
-    .leaflet-interactive:hover {
-      transform: scale(1.2);
-      fill-opacity: 1 !important;
-      stroke: #000;
-      stroke-width: 1;
+      font-size: 14px;
+      animation: popIn 0.5s ease-out;
     }
 
     @keyframes fadeIn {
-      0% { opacity: 0; transform: translateY(10px); }
-      100% { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0); opacity: 0; }
+      60% { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(1); }
     }
   </style>
 </head>
@@ -57,41 +56,38 @@
   <div id="map"></div>
   <div class="legend">
     <b>Legenda:</b><br>
-    <span style="color:green;">●</span> EU (członek)<br>
-    <span style="color:blue;">●</span> spoza UE<br>
-    📏 Kliknij 2 kraje, by zmierzyć odległość
+    <span style="background: #2ecc71;"></span> EU (członek)<br>
+    <span style="background: #3498db;"></span> Poza UE<br><br>
+    📏 Kliknij dwa punkty, by zmierzyć odległość
   </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
     const map = L.map('map', {
+      center: [52, 15],
+      zoom: 4,
+      maxBounds: [[30, -20], [70, 50]],
       minZoom: 3,
       maxZoom: 7,
-      maxBounds: [[30, -20], [70, 50]]
-    }).setView([52, 15], 4);
+      zoomControl: true
+    });
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; mapa interaktywna',
+    }).addTo(map);
 
     const countries = {
       "EU(欧盟)": {
-        color: "green",
-        list: [
-          "Austria","Belgium","Bulgaria","Croatia","Cyprus","Czech",
-          "Denmark","Estonia","Finland","France","Germany","Greece",
-          "Hungary","Ireland","Italy","Latvia","Lithuania","Luxembourg",
-          "Malta","Netherlands","Poland","Portugal","Romania",
-          "Slovakia","Slovenia","Spain","Sweden"
-        ]
+        color: "#2ecc71",
+        list: ["Cyprus","Belgium","Bulgaria","Croatia","Czech","Denmark","Estonia","Finland","France","Germany",
+               "Greece","Hungary","Ireland","Italy","Latvia","Lithuania","Malta","Netherlands","Poland","Portugal",
+               "Romania","Slovakia","Slovenia","Spain","Sweden","Austria","Luxembourg"]
       },
       "EU(非欧盟)": {
-        color: "blue",
-        list: [
-          "Albania","Belarus","Bosnia and Herzegovina","Georgia",
-          "Iceland","Israel","North Macedonia","Norway","Russia",
-          "Serbia","Montenegro","Switzerland","Turkey","Ukraine",
-          "United Arab Emirates","United Kingdom","Yugoslavia",
-          "Azerbaijan","Kosovo","Moldova"
-        ]
+        color: "#3498db",
+        list: ["Albania","Belarus","Bosnia and Herzegovina","Georgia","Iceland","Israel","Macedonia","Norway","Russia",
+               "Serbia","Montenegro","Switzerland","Turkey","Ukraine","United Arab Emirates","United Kingdom",
+               "Yugoslavia","Azerbaijan","Kosovo","Moldova"]
       }
     };
 
@@ -104,37 +100,49 @@
       "Poland":[52.23,21.01],"Portugal":[38.72,-9.14],"Romania":[44.43,26.1],"Slovakia":[48.15,17.11],
       "Slovenia":[46.06,14.51],"Spain":[40.42,-3.7],"Sweden":[59.33,18.07],
       "Albania":[41.33,19.82],"Belarus":[53.9,27.56],"Bosnia and Herzegovina":[43.86,18.41],"Georgia":[41.72,44.83],
-      "Iceland":[64.14,-21.9],"Israel":[31.77,35.21],"North Macedonia":[42,21.43],"Norway":[59.91,10.75],
+      "Iceland":[64.14,-21.9],"Israel":[31.77,35.21],"Macedonia":[42,21.43],"Norway":[59.91,10.75],
       "Russia":[55.76,37.62],"Serbia":[44.79,20.45],"Montenegro":[42.43,19.26],"Switzerland":[46.95,7.45],
       "Turkey":[39.92,32.85],"Ukraine":[50.45,30.52],"United Arab Emirates":[24.45,54.38],
       "United Kingdom":[51.51,-0.13],"Yugoslavia":[44.8,20.5],"Azerbaijan":[40.41,49.87],
       "Kosovo":[42.66,21.17],"Moldova":[47.01,28.86]
     };
 
-    Object.entries(countries).forEach(([region, data]) => {
-      const color = data.color;
-      data.list.forEach(country => {
-        if (centroids[country]) {
-          const marker = L.circleMarker(centroids[country], {
-            radius: 8,
+    // Dodaj markery z animacją
+    Object.entries(countries).forEach(([region, obj]) => {
+      const color = obj.color;
+      obj.list.forEach(country => {
+        const coords = centroids[country];
+        if (coords) {
+          const marker = L.circleMarker(coords, {
+            radius: 9,
             color: color,
             fillColor: color,
-            fillOpacity: 0.9
+            fillOpacity: 1,
+            weight: 2
           }).addTo(map);
-          marker.bindTooltip(country, { permanent: true, direction: 'top' });
+          marker.bindTooltip("<div class='marker-label'>" + country + "</div>", {
+            permanent: false,
+            direction: 'top',
+            offset: [0, -10]
+          });
           marker.on('click', addMeasurement);
         }
       });
     });
 
-    let distanceMarkers = [], distanceLine = null, distanceLabel = null;
+    // Obsługa pomiaru
+    let distanceMarkers = [];
+    let distanceLine = null;
+    let distanceLabel = null;
 
     function haversine(lat1, lon1, lat2, lon2) {
       function toRad(x) { return x * Math.PI / 180; }
-      const R = 6371e3, φ1 = toRad(lat1), φ2 = toRad(lat2);
-      const Δφ = toRad(lat2 - lat1), Δλ = toRad(lon2 - lon1);
-      const a = Math.sin(Δφ/2)**2 + Math.cos(φ1)*Math.cos(φ2)*Math.sin(Δλ/2)**2;
-      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      const R = 6371e3;
+      const φ1 = toRad(lat1), φ2 = toRad(lat2);
+      const Δφ = toRad(lat2 - lat1);
+      const Δλ = toRad(lon2 - lon1);
+      const a = Math.sin(Δφ/2)**2 + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ/2)**2;
+      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     }
 
     function formatDistance(d) {
