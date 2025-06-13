@@ -52,27 +52,135 @@
     <span style="background:#3498db;"></span> spoza UE
   </div>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+  
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
 
-function resetMeasurement() {
-  distanceMarkers.forEach(m => map.removeLayer(m));
-  if (distanceLine) map.removeLayer(distanceLine);
-  if (distanceLabel) map.removeLayer(distanceLabel);
-  distanceMarkers = [];
-  distanceLine = null;
-  distanceLabel = null;
-}
+// --- Kolorowanie regionów państw ---
+const countryShapes = {
+  "Austria":"AT","Belgium":"BE","Bulgaria":"BG","Croatia":"HR","Cyprus":"CY","Czech":"CZ","Denmark":"DK",
+  "Estonia":"EE","Finland":"FI","France":"FR","Germany":"DE","Greece":"GR","Hungary":"HU","Ireland":"IE",
+  "Italy":"IT","Latvia":"LV","Lithuania":"LT","Luxembourg":"LU","Malta":"MT","Netherlands":"NL","Poland":"PL",
+  "Portugal":"PT","Romania":"RO","Slovakia":"SK","Slovenia":"SI","Spain":"ES","Sweden":"SE",
+  "Albania":"AL","Belarus":"BY","Bosnia and Herzegovina":"BA","Georgia":"GE","Iceland":"IS","Israel":"IL",
+  "Macedonia":"MK","Norway":"NO","Russia":"RU","Serbia":"RS","Montenegro":"ME","Switzerland":"CH",
+  "Turkey":"TR","Ukraine":"UA","United Arab Emirates":"AE","United Kingdom":"GB","Azerbaijan":"AZ",
+  "Kosovo":"XK","Moldova":"MD"
+};
+
+Object.entries(countryShapes).forEach(([name, code]) => {
+  fetch('https://raw.githubusercontent.com/datasets/geo-countries/master/data/' + code + '.geojson')
+    .then(resp => resp.json())
+    .then(data => {
+      L.geoJSON(data, {
+        style: function() {
+          const color = countries["EU(欧盟)"].list.includes(name) ? '#a8e6cf' : '#dcedc1';
+          return {
+            color: '#555',
+            weight: 1,
+            fillColor: color,
+            fillOpacity: 0.5
+          };
+        }
+      }).addTo(map);
+    });
+});
 </script>
+<script src="https://unpkg.com/leaflet.geodesic">
+
+// --- Kolorowanie regionów państw ---
+const countryShapes = {
+  "Austria":"AT","Belgium":"BE","Bulgaria":"BG","Croatia":"HR","Cyprus":"CY","Czech":"CZ","Denmark":"DK",
+  "Estonia":"EE","Finland":"FI","France":"FR","Germany":"DE","Greece":"GR","Hungary":"HU","Ireland":"IE",
+  "Italy":"IT","Latvia":"LV","Lithuania":"LT","Luxembourg":"LU","Malta":"MT","Netherlands":"NL","Poland":"PL",
+  "Portugal":"PT","Romania":"RO","Slovakia":"SK","Slovenia":"SI","Spain":"ES","Sweden":"SE",
+  "Albania":"AL","Belarus":"BY","Bosnia and Herzegovina":"BA","Georgia":"GE","Iceland":"IS","Israel":"IL",
+  "Macedonia":"MK","Norway":"NO","Russia":"RU","Serbia":"RS","Montenegro":"ME","Switzerland":"CH",
+  "Turkey":"TR","Ukraine":"UA","United Arab Emirates":"AE","United Kingdom":"GB","Azerbaijan":"AZ",
+  "Kosovo":"XK","Moldova":"MD"
+};
+
+Object.entries(countryShapes).forEach(([name, code]) => {
+  fetch('https://raw.githubusercontent.com/datasets/geo-countries/master/data/' + code + '.geojson')
+    .then(resp => resp.json())
+    .then(data => {
+      L.geoJSON(data, {
+        style: function() {
+          const color = countries["EU(欧盟)"].list.includes(name) ? '#a8e6cf' : '#dcedc1';
+          return {
+            color: '#555',
+            weight: 1,
+            fillColor: color,
+            fillOpacity: 0.5
+          };
+        }
+      }).addTo(map);
+    });
+});
+</script>
+<script src="https://unpkg.com/leaflet-ajax">
+
+// --- Kolorowanie regionów państw ---
+const countryShapes = {
+  "Austria":"AT","Belgium":"BE","Bulgaria":"BG","Croatia":"HR","Cyprus":"CY","Czech":"CZ","Denmark":"DK",
+  "Estonia":"EE","Finland":"FI","France":"FR","Germany":"DE","Greece":"GR","Hungary":"HU","Ireland":"IE",
+  "Italy":"IT","Latvia":"LV","Lithuania":"LT","Luxembourg":"LU","Malta":"MT","Netherlands":"NL","Poland":"PL",
+  "Portugal":"PT","Romania":"RO","Slovakia":"SK","Slovenia":"SI","Spain":"ES","Sweden":"SE",
+  "Albania":"AL","Belarus":"BY","Bosnia and Herzegovina":"BA","Georgia":"GE","Iceland":"IS","Israel":"IL",
+  "Macedonia":"MK","Norway":"NO","Russia":"RU","Serbia":"RS","Montenegro":"ME","Switzerland":"CH",
+  "Turkey":"TR","Ukraine":"UA","United Arab Emirates":"AE","United Kingdom":"GB","Azerbaijan":"AZ",
+  "Kosovo":"XK","Moldova":"MD"
+};
+
+Object.entries(countryShapes).forEach(([name, code]) => {
+  fetch('https://raw.githubusercontent.com/datasets/geo-countries/master/data/' + code + '.geojson')
+    .then(resp => resp.json())
+    .then(data => {
+      L.geoJSON(data, {
+        style: function() {
+          const color = countries["EU(欧盟)"].list.includes(name) ? '#a8e6cf' : '#dcedc1';
+          return {
+            color: '#555',
+            weight: 1,
+            fillColor: color,
+            fillOpacity: 0.5
+          };
+        }
+      }).addTo(map);
+    });
+});
+</script>
+
   <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js">
 
-function resetMeasurement() {
-  distanceMarkers.forEach(m => map.removeLayer(m));
-  if (distanceLine) map.removeLayer(distanceLine);
-  if (distanceLabel) map.removeLayer(distanceLabel);
-  distanceMarkers = [];
-  distanceLine = null;
-  distanceLabel = null;
-}
+// --- Kolorowanie regionów państw ---
+const countryShapes = {
+  "Austria":"AT","Belgium":"BE","Bulgaria":"BG","Croatia":"HR","Cyprus":"CY","Czech":"CZ","Denmark":"DK",
+  "Estonia":"EE","Finland":"FI","France":"FR","Germany":"DE","Greece":"GR","Hungary":"HU","Ireland":"IE",
+  "Italy":"IT","Latvia":"LV","Lithuania":"LT","Luxembourg":"LU","Malta":"MT","Netherlands":"NL","Poland":"PL",
+  "Portugal":"PT","Romania":"RO","Slovakia":"SK","Slovenia":"SI","Spain":"ES","Sweden":"SE",
+  "Albania":"AL","Belarus":"BY","Bosnia and Herzegovina":"BA","Georgia":"GE","Iceland":"IS","Israel":"IL",
+  "Macedonia":"MK","Norway":"NO","Russia":"RU","Serbia":"RS","Montenegro":"ME","Switzerland":"CH",
+  "Turkey":"TR","Ukraine":"UA","United Arab Emirates":"AE","United Kingdom":"GB","Azerbaijan":"AZ",
+  "Kosovo":"XK","Moldova":"MD"
+};
+
+Object.entries(countryShapes).forEach(([name, code]) => {
+  fetch('https://raw.githubusercontent.com/datasets/geo-countries/master/data/' + code + '.geojson')
+    .then(resp => resp.json())
+    .then(data => {
+      L.geoJSON(data, {
+        style: function() {
+          const color = countries["EU(欧盟)"].list.includes(name) ? '#a8e6cf' : '#dcedc1';
+          return {
+            color: '#555',
+            weight: 1,
+            fillColor: color,
+            fillOpacity: 0.5
+          };
+        }
+      }).addTo(map);
+    });
+});
 </script>
 
   <script>
@@ -179,29 +287,35 @@ function resetMeasurement() {
     }).addTo(map);
   
 
-function resetMeasurement() {
-  distanceMarkers.forEach(m => map.removeLayer(m));
-  if (distanceLine) map.removeLayer(distanceLine);
-  if (distanceLabel) map.removeLayer(distanceLabel);
-  distanceMarkers = [];
-  distanceLine = null;
-  distanceLabel = null;
-}
-</script>
+// --- Kolorowanie regionów państw ---
+const countryShapes = {
+  "Austria":"AT","Belgium":"BE","Bulgaria":"BG","Croatia":"HR","Cyprus":"CY","Czech":"CZ","Denmark":"DK",
+  "Estonia":"EE","Finland":"FI","France":"FR","Germany":"DE","Greece":"GR","Hungary":"HU","Ireland":"IE",
+  "Italy":"IT","Latvia":"LV","Lithuania":"LT","Luxembourg":"LU","Malta":"MT","Netherlands":"NL","Poland":"PL",
+  "Portugal":"PT","Romania":"RO","Slovakia":"SK","Slovenia":"SI","Spain":"ES","Sweden":"SE",
+  "Albania":"AL","Belarus":"BY","Bosnia and Herzegovina":"BA","Georgia":"GE","Iceland":"IS","Israel":"IL",
+  "Macedonia":"MK","Norway":"NO","Russia":"RU","Serbia":"RS","Montenegro":"ME","Switzerland":"CH",
+  "Turkey":"TR","Ukraine":"UA","United Arab Emirates":"AE","United Kingdom":"GB","Azerbaijan":"AZ",
+  "Kosovo":"XK","Moldova":"MD"
+};
 
-  <button onclick="resetMeasurement()" style="
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    z-index: 9999;
-    background-color: #f44336;
-    color: white;
-    border: none;
-    padding: 10px 16px;
-    font-size: 14px;
-    border-radius: 6px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    cursor: pointer;
-  ">💾 Reset pomiaru</button>
+Object.entries(countryShapes).forEach(([name, code]) => {
+  fetch('https://raw.githubusercontent.com/datasets/geo-countries/master/data/' + code + '.geojson')
+    .then(resp => resp.json())
+    .then(data => {
+      L.geoJSON(data, {
+        style: function() {
+          const color = countries["EU(欧盟)"].list.includes(name) ? '#a8e6cf' : '#dcedc1';
+          return {
+            color: '#555',
+            weight: 1,
+            fillColor: color,
+            fillOpacity: 0.5
+          };
+        }
+      }).addTo(map);
+    });
+});
+</script>
 </body>
 </html>
